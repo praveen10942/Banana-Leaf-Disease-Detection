@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About — LeafAI{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <h5 class="fw-bold mb-1">About LeafAI</h5>
+  <p class="text-muted small mb-0">Banana Leaf Disease Detection using Deep Learning</p>
+</div>
+
+<div class="card p-4 mb-4">
+  <div class="row g-4 align-items-center">
+    
+    <!-- LEFT SIDE -->
+    <div class="col-md-7">
+      <h6 class="fw-bold text-green mb-2">Project Overview</h6>
+      <p class="text-muted small mb-3">
+        LeafAI is a web-based disease detection system built specifically for banana plant health monitoring.
+        It uses a convolutional neural network trained on real banana leaf images to identify common
+        fungal diseases early, helping farmers take timely action to protect their crops.
+      </p>
+      <p class="text-muted small mb-0">
+        Early detection of banana leaf diseases can reduce crop loss by up to 40%. This system
+        brings that capability to any device with a camera and internet connection.
+      </p>
+    </div>
+
+    <!-- RIGHT SIDE (FIXED IMAGE) -->
+    <div class="col-md-5 text-center">
+      <div style="line-height:1;">
+        <img src="{% static 'images/leaf.png' %}" 
+             style="width:90px; height:auto;">
+      </div>
+      <p class="text-muted small mt-2 mb-0">
+        LeafAI Disease Detection System
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- REST SAME -->
+<div class="row g-4 mb-4">
+  <div class="col-md-6">
+    <div class="card p-4 h-100">
+      <h6 class="fw-bold mb-3">
+        <i class="bi bi-cpu me-2 text-green"></i>Model Architecture
+      </h6>
+      <ul class="text-muted small mb-0 ps-3">
+        <li class="mb-2">Base model: MobileNetV2 pretrained on ImageNet</li>
+        <li class="mb-2">Transfer learning with two-phase training</li>
+        <li class="mb-2">Phase 1: Custom classification head training</li>
+        <li class="mb-2">Phase 2: Fine-tuning top 30 base layers</li>
+        <li class="mb-2">Input size: 224 × 224 pixels</li>
+        <li>Output: 4-class softmax classifier</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card p-4 h-100">
+      <h6 class="fw-bold mb-3">
+        <i class="bi bi-stack me-2 text-green"></i>Tech Stack
+      </h6>
+      <ul class="text-muted small mb-0 ps-3">
+        <li class="mb-2">Backend: Django 4.2</li>
+        <li class="mb-2">Deep Learning: TensorFlow / Keras</li>
+        <li class="mb-2">Model: MobileNetV2</li>
+        <li class="mb-2">Frontend: Bootstrap 5</li>
+        <li class="mb-2">Database: SQLite</li>
+        <li>Dataset: BananaLSD</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — LeafAI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h5 class="fw-bold mb-0">Dashboard</h5>
+    <p class="text-muted small mb-0">Welcome back, {{ user.username }}</p>
+  </div>
+  <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-3">
+    <i class="bi bi-plus-lg me-1"></i>New Analysis
+  </a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-4">
+    <div class="card p-3 stat-card h-100">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted small mb-1">Total Analyses</p>
+          <h3 class="fw-bold mb-0">{{ total }}</h3>
+        </div>
+        <div class="rounded-circle bg-green-light d-flex align-items-center justify-content-center"
+             style="width:44px; height:44px;">
+          <i class="bi bi-activity text-green"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card p-3 h-100" style="border-left: 4px solid #198754;">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted small mb-1">Healthy Leaves</p>
+          <h3 class="fw-bold mb-0 text-success">{{ healthy }}</h3>
+        </div>
+        <div class="rounded-circle d-flex align-items-center justify-content-center"
+             style="width:44px; height:44px; background:#d1fae5;">
+          <i class="bi bi-check-circle-fill text-success"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card p-3 h-100" style="border-left: 4px solid #dc3545;">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted small mb-1">Diseased Leaves</p>
+          <h3 class="fw-bold mb-0 text-danger">{{ diseased }}</h3>
+        </div>
+        <div class="rounded-circle d-flex align-items-center justify-content-center"
+             style="width:44px; height:44px; background:#fee2e2;">
+          <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-7">
+    <div class="card p-4 h-100">
+      <h6 class="fw-semibold mb-3">Recent Analyses</h6>
+      {% if recent %}
+        {% for p in recent %}
+        <div class="d-flex align-items-center gap-3 mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+          <img src="{{ p.image.url }}" alt=""
+               style="width:48px; height:48px; object-fit:cover; border-radius:8px; flex-shrink:0;">
+          <div class="flex-grow-1 min-w-0">
+            <div class="fw-semibold small text-truncate">
+              {% if p.is_healthy %}
+                <span class="text-success">{{ p.disease }}</span>
+              {% else %}
+                <span class="text-danger">{{ p.disease }}</span>
+              {% endif %}
+            </div>
+            <div class="text-muted" style="font-size:.75rem;">
+              {{ p.confidence }}% confidence · {{ p.created_at|date:"d M, H:i" }}
+            </div>
+          </div>
+          <span class="badge bg-{{ p.is_healthy|yesno:'success,danger' }}" style="font-size:.7rem;">
+            {{ p.is_healthy|yesno:'Healthy,Diseased' }}
+          </span>
+        </div>
+        {% endfor %}
+        <a href="{% url 'history' %}" class="btn btn-sm btn-outline-secondary w-100 mt-1">
+          View All History
+        </a>
+      {% else %}
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-inbox" style="font-size:2rem; opacity:.4;"></i>
+          <p class="mt-2 mb-3 small">No analyses yet</p>
+          <a href="{% url 'upload' %}" class="btn btn-sm btn-primary">Start Analyzing</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="card p-4 h-100">
+      <h6 class="fw-semibold mb-3">Disease Breakdown</h6>
+      {% if disease_counts %}
+        {% for item in disease_counts %}
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="fw-semibold">{{ item.disease }}</span>
+            <span class="text-muted">{{ item.count }}</span>
+          </div>
+          <div class="progress" style="height:6px;">
+            <div class="progress-bar bg-danger"
+                 style="width: {% widthratio item.count diseased 100 %}%; border-radius:4px;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-pie-chart" style="font-size:2rem; opacity:.4;"></i>
+          <p class="small mt-2 mb-0">No disease data yet</p>
+        </div>
+      {% endif %}
+
+      <div class="mt-4 pt-3 border-top">
+        <h6 class="fw-semibold mb-2 small text-muted text-uppercase" style="letter-spacing:.04em;">Quick Links</h6>
+        <div class="d-grid gap-2">
+          <a href="{% url 'upload' %}" class="btn btn-sm btn-primary">
+            <i class="bi bi-search me-1"></i>Analyze New Leaf
+          </a>
+          <a href="{% url 'about' %}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-info-circle me-1"></i>About This System
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

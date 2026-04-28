@@ -1,0 +1,42 @@
+{
+  "overall_accuracy": 67.57,
+  "total_samples": 185,
+  "num_classes": 4,
+  "model_name": "Custom CNN (Trained from Scratch)",
+  "input_size": "128 x 128",
+  "architecture": "4 Conv Blocks (32\u219264\u2192128\u2192256) + GAP + Dense",
+  "per_class": {
+    "cordana": {
+      "accuracy": 87.5,
+      "precision": 77.78,
+      "recall": 87.5,
+      "f1": 82.35,
+      "samples": 32,
+      "correct": 28
+    },
+    "healthy": {
+      "accuracy": 84.0,
+      "precision": 42.86,
+      "recall": 84.0,
+      "f1": 56.76,
+      "samples": 25,
+      "correct": 21
+    },
+    "pestalotiopsis": {
+      "accuracy": 50.0,
+      "precision": 43.59,
+      "recall": 50.0,
+      "f1": 46.58,
+      "samples": 34,
+      "correct": 17
+    },
+    "sigatoka": {
+      "accuracy": 62.77,
+      "precision": 96.72,
+      "recall": 62.77,
+      "f1": 76.13,
+      "samples": 94,
+      "correct": 59
+    }
+  }
+}

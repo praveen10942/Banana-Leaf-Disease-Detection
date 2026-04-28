@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}LeafGuard — Banana Leaf Disease Detection{% endblock %}
+
+{% block content %}
+<div class="text-center py-4">
+  <div style="font-size:3.5rem; margin-bottom:12px;">🍃</div>
+  <h1 style="font-weight:800; font-size:2.2rem; color:#1b4332; margin-bottom:10px;">
+    Banana Leaf Disease Detection
+  </h1>
+  <p class="text-muted mx-auto" style="max-width:520px; font-size:1rem; line-height:1.6;">
+    Upload a photo of a banana leaf and get an instant AI-powered diagnosis. Detect diseases early and take timely action to protect your crop.
+  </p>
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    {% if user.is_authenticated %}
+      <a href="{% url 'upload' %}" class="btn-primary-green btn" style="padding: 12px 32px; font-size:1rem;">
+        <i class="fas fa-leaf me-2"></i>Analyze a Leaf
+      </a>
+      <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary" style="border-radius:10px; padding:12px 28px;">
+        View Dashboard
+      </a>
+    {% else %}
+      <a href="{% url 'register' %}" class="btn-primary-green btn" style="padding: 12px 32px; font-size:1rem;">
+        Get Started Free
+      </a>
+      <a href="{% url 'login' %}" class="btn btn-outline-secondary" style="border-radius:10px; padding:12px 28px;">
+        Sign In
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-4 mt-2">
+  <div class="col-md-4">
+    <div class="card h-100 p-4 text-center">
+      <div style="font-size:2rem; margin-bottom:10px;">📸</div>
+      <h6 class="fw-bold">Upload a Photo</h6>
+      <p class="text-muted small mb-0">Take a clear photo of the banana leaf and upload it to the system.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 p-4 text-center">
+      <div style="font-size:2rem; margin-bottom:10px;">🧠</div>
+      <h6 class="fw-bold">AI Analysis</h6>
+      <p class="text-muted small mb-0">Our MobileNetV2 deep learning model analyzes the leaf image in seconds.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 p-4 text-center">
+      <div style="font-size:2rem; margin-bottom:10px;">📋</div>
+      <h6 class="fw-bold">Get Diagnosis</h6>
+      <p class="text-muted small mb-0">Receive the disease name, confidence score, and recommended action.</p>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4 p-4">
+  <p class="section-title mb-3">Detectable Conditions</p>
+  <div class="row g-3">
+    <div class="col-md-3 col-6">
+      <div class="d-flex align-items-center gap-2">
+        <span style="color:#2d6a4f; font-size:1.1rem;">✅</span>
+        <span class="small fw-semibold">Healthy Leaf</span>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="d-flex align-items-center gap-2">
+        <span style="color:#f4a261; font-size:1.1rem;">⚠️</span>
+        <span class="small fw-semibold">Sigatoka</span>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="d-flex align-items-center gap-2">
+        <span style="color:#f4a261; font-size:1.1rem;">⚠️</span>
+        <span class="small fw-semibold">Cordana Leaf Spot</span>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="d-flex align-items-center gap-2">
+        <span style="color:#e63946; font-size:1.1rem;">🔴</span>
+        <span class="small fw-semibold">Pestalotiopsis</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Analyze Leaf — LeafAI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h5 class="fw-bold mb-0">Analyze a Leaf</h5>
+    <p class="text-muted small mb-0">Upload a clear photo of a banana leaf for disease detection</p>
+  </div>
+  <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-bar-chart me-1"></i>Dashboard
+  </a>
+</div>
+
+<div class="card p-4 mb-4">
+  <form method="POST" enctype="multipart/form-data" id="uploadForm">
+    {% csrf_token %}
+    <div id="dropZone"
+         onclick="document.getElementById('imgInput').click()"
+         style="border: 2px dashed #dee2e6; border-radius: 10px; padding: 50px 20px;
+                text-align: center; cursor: pointer; transition: all .2s; background: #fafafa;">
+      <div id="previewWrap" style="display:none; margin-bottom: 16px;">
+        <img id="previewImg" src="" alt="preview"
+             style="max-height: 260px; max-width: 100%; border-radius: 8px; object-fit: contain;">
+      </div>
+      <div id="dropText">
+        <i class="bi bi-cloud-arrow-up" style="font-size: 2.5rem; color: #adb5bd;"></i>
+        <p class="fw-semibold mt-2 mb-1">Click to browse or drag & drop</p>
+        <p class="text-muted small mb-0">Supports JPG, PNG, WEBP</p>
+      </div>
+    </div>
+    <input type="file" id="imgInput" name="image" accept="image/*" style="display:none;">
+    <div id="fileInfo" class="text-muted small text-center mt-2" style="display:none;"></div>
+    <div class="d-grid mt-3">
+      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+        <i class="bi bi-search me-2"></i>Analyze Leaf
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4">
+  <h6 class="fw-semibold mb-3 text-muted" style="font-size: .8rem; text-transform: uppercase; letter-spacing: .05em;">
+    Tips for Best Results
+  </h6>
+  <div class="row g-3">
+    <div class="col-sm-6">
+      <div class="d-flex gap-2 align-items-start">
+        <i class="bi bi-check-circle-fill text-green mt-1"></i>
+        <span class="small text-muted">Use good lighting — avoid dark or blurry images</span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="d-flex gap-2 align-items-start">
+        <i class="bi bi-check-circle-fill text-green mt-1"></i>
+        <span class="small text-muted">Capture the leaf clearly without background clutter</span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="d-flex gap-2 align-items-start">
+        <i class="bi bi-check-circle-fill text-green mt-1"></i>
+        <span class="small text-muted">Include the affected area prominently in the frame</span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="d-flex gap-2 align-items-start">
+        <i class="bi bi-check-circle-fill text-green mt-1"></i>
+        <span class="small text-muted">Avoid excessive zoom — show the whole leaf if possible</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const zone = document.getElementById('dropZone');
+  const input = document.getElementById('imgInput');
+
+  input.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('previewWrap').style.display = 'block';
+      document.getElementById('dropText').style.display = 'none';
+      document.getElementById('fileInfo').style.display = 'block';
+      document.getElementById('fileInfo').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+      document.getElementById('submitBtn').disabled = false;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.style.borderColor = '#2d9e4f';
+    zone.style.background = '#f0faf4';
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.style.borderColor = '#dee2e6';
+    zone.style.background = '#fafafa';
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.style.borderColor = '#dee2e6';
+    zone.style.background = '#fafafa';
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      input.dispatchEvent(new Event('change'));
+    }
+  });
+
+  document.getElementById('uploadForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Analyzing...';
+  });
+</script>
+{% endblock %}
