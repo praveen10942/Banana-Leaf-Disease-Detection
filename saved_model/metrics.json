@@ -1,42 +1,83 @@
 {
-  "overall_accuracy": 67.57,
-  "total_samples": 185,
-  "num_classes": 4,
-  "model_name": "Custom CNN (Trained from Scratch)",
-  "input_size": "128 x 128",
-  "architecture": "4 Conv Blocks (32\u219264\u2192128\u2192256) + GAP + Dense",
+  "overall_accuracy": 88.11,
+  "total_samples": 244,
+  "num_classes": 9,
+  "model_name": "MobileNetV2 (Transfer Learning)",
+  "input_size": "224 x 224",
+  "architecture": "MobileNetV2 + GAP + Dense(512) + Dense(256) + Softmax",
+  "training_phases": "Phase 1: Frozen base \u2192 Phase 2: Fine-tune last 30 layers",
   "per_class": {
+    "black_sigatoka": {
+      "accuracy": 53.85,
+      "precision": 70.0,
+      "recall": 53.85,
+      "f1": 60.87,
+      "samples": 13,
+      "correct": 7
+    },
+    "bract_mosaic_virus": {
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "samples": 10,
+      "correct": 10
+    },
     "cordana": {
+      "accuracy": 100.0,
+      "precision": 80.0,
+      "recall": 100.0,
+      "f1": 88.89,
+      "samples": 32,
+      "correct": 32
+    },
+    "healthy": {
+      "accuracy": 92.0,
+      "precision": 88.46,
+      "recall": 92.0,
+      "f1": 90.2,
+      "samples": 25,
+      "correct": 23
+    },
+    "insect_pest": {
+      "accuracy": 88.24,
+      "precision": 78.95,
+      "recall": 88.24,
+      "f1": 83.33,
+      "samples": 17,
+      "correct": 15
+    },
+    "moko": {
+      "accuracy": 81.82,
+      "precision": 90.0,
+      "recall": 81.82,
+      "f1": 85.71,
+      "samples": 11,
+      "correct": 9
+    },
+    "panama": {
       "accuracy": 87.5,
       "precision": 77.78,
       "recall": 87.5,
       "f1": 82.35,
-      "samples": 32,
-      "correct": 28
-    },
-    "healthy": {
-      "accuracy": 84.0,
-      "precision": 42.86,
-      "recall": 84.0,
-      "f1": 56.76,
-      "samples": 25,
-      "correct": 21
+      "samples": 8,
+      "correct": 7
     },
     "pestalotiopsis": {
-      "accuracy": 50.0,
-      "precision": 43.59,
-      "recall": 50.0,
-      "f1": 46.58,
+      "accuracy": 70.59,
+      "precision": 92.31,
+      "recall": 70.59,
+      "f1": 80.0,
       "samples": 34,
-      "correct": 17
+      "correct": 24
     },
-    "sigatoka": {
-      "accuracy": 62.77,
-      "precision": 96.72,
-      "recall": 62.77,
-      "f1": 76.13,
+    "yellow_sigatoka": {
+      "accuracy": 93.62,
+      "precision": 93.62,
+      "recall": 93.62,
+      "f1": 93.62,
       "samples": 94,
-      "correct": 59
+      "correct": 88
     }
   }
 }

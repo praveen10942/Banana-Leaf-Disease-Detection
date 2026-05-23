@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Cookie Policy — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .legal-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 16px;
+  }
+  .legal-section-title i { font-size: 1.15rem; }
+
+  .cookie-table {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+  }
+  .cookie-table table {
+    margin-bottom: 0;
+  }
+  .cookie-table thead {
+    background-color: var(--bg-body);
+  }
+  .cookie-table th, .cookie-table td {
+    font-size: 0.82rem;
+    vertical-align: middle;
+  }
+  .cookie-table th {
+    font-weight: 700;
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <!-- Header Hero Banner -->
+    <div class="card p-4 p-md-5 mb-4 text-center border-0 overflow-hidden position-relative reveal" style="background: linear-gradient(135deg, hsla(142, 70%, 45%, 0.12) 0%, hsla(142, 70%, 45%, 0.03) 100%);">
+      <div class="position-absolute top-0 end-0 p-3 opacity-10">
+        <i class="bi bi-cookie" style="font-size: 8rem;"></i>
+      </div>
+      <div class="position-relative z-1">
+        <div class="d-inline-flex align-items-center justify-content-center p-3 bg-green-light text-green rounded-circle mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-cookie fs-3"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="letter-spacing: -0.5px;">Cookie Policy</h2>
+        <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
+          Learn how we use session cookies, local storage variables, and responsive caches to provide a seamless dark/light farmer experience.
+        </p>
+        <span class="badge bg-green-light text-green mt-3 fw-semibold" style="font-family: var(--font-ui); font-size: 0.7rem;">Last Updated: May 23, 2026</span>
+      </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card p-4 p-md-5 shadow-sm">
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-question-circle-fill"></i> 1. What are Cookies and Local Storage?</h5>
+        <p>
+          Cookies are small text files stored by your web browser on your computer or mobile device. Local Storage (<code>localStorage</code>) is a similar built-in browser memory vault that allows websites to remember configurations and preferences locally without slowing down page transitions.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-hdd-fill"></i> 2. Essential Keys and Cookies We Use</h5>
+        <p>
+          BananaGuard AI operates with the absolute minimum set of technical tracking elements required to provide functional value. We do not run intrusive commercial cross-site tracking beacons.
+        </p>
+        
+        <div class="cookie-table mt-3">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Key/Cookie Name</th>
+                <th style="width: 20%;">Type</th>
+                <th>Purpose & Lifetime</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="text-green fw-bold">sessionid</code></td>
+                <td><span class="badge bg-green-light text-green" style="font-size: 0.65rem;">Secure Session</span></td>
+                <td class="text-muted">Stores unique token identifying your logged-in farmer account. Keeps you signed in as you navigate between Scanner, Dashboard, and History. Expires when you log out.</td>
+              </tr>
+              <tr>
+                <td><code class="text-green fw-bold">csrftoken</code></td>
+                <td><span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.65rem;">Security</span></td>
+                <td class="text-muted">Protects our web application form actions (like registration, logins, and image uploads) from Cross-Site Request Forgery (CSRF) exploits. Essential security utility.</td>
+              </tr>
+              <tr>
+                <td><code class="text-green fw-bold">leafai-theme</code></td>
+                <td><span class="badge bg-info-subtle text-info-emphasis" style="font-size: 0.65rem;">Local Storage</span></td>
+                <td class="text-muted">Remembers your design theme preference (<code>light</code> or <code>dark</code> mode). Prevents page flicker when loading custom colors on high-contrast AMOLED mobile screens. Indefinite lifetime unless cleared.</td>
+              </tr>
+              <tr>
+                <td><code class="text-green fw-bold">leafai-lang</code></td>
+                <td><span class="badge bg-info-subtle text-info-emphasis" style="font-size: 0.65rem;">Local Storage</span></td>
+                <td class="text-muted">Stores your selected UI language (English, Hindi, Tamil, Telugu, or Kannada) so the interface loads in your preferred language automatically.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-globe-americas"></i> 3. Third-Party CDNs</h5>
+        <p>Our application structure relies on trusted, high-performance Content Delivery Networks (CDNs):</p>
+        <ul class="small" style="line-height: 1.8;">
+          <li class="mb-2"><strong>Bootstrap CSS CDN:</strong> Speeds up design layout rendering.</li>
+          <li class="mb-2"><strong>Bootstrap Icons CDN:</strong> Delivers clean visual icons for navigation and statuses.</li>
+          <li class="mb-0"><strong>Google Fonts CDN:</strong> Loads modern visual typography (<em>Plus Jakarta Sans</em> & <em>Inter</em>).</li>
+        </ul>
+        <p class="small text-muted mt-2">
+          These CDNs do not place commercial tracking cookies on your device but may record standard connection headers (IP address, user agent) to compile latency stats.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-sliders2"></i> 4. Managing Your Preferences</h5>
+        <p>
+          You can block or delete cookies by adjusting your browser security preferences. However, please note that disabling the essential session or CSRF cookies will prevent you from logging in, accessing the crop dashboard, or running leaf diagnostics.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-telephone-fill"></i> 5. Inquiries</h5>
+        <p class="mb-0">
+          For technical details or questions regarding browser data structures, feel free to contact us at:
+          <a href="mailto:praveenkumar10942@gmail.com" class="text-green fw-bold text-decoration-none ms-1">praveenkumar10942@gmail.com</a>.
+        </p>
+      </div>
+
+      <div class="text-center mt-4 border-top pt-4">
+        <a href="{% url 'landing' %}" class="btn btn-outline-secondary btn-sm px-4 me-2" style="border-radius: 12px;">
+          <i class="bi bi-house-door me-1"></i>Back Home
+        </a>
+        <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-4" style="border-radius: 12px;">
+          <i class="bi bi-camera me-1"></i>Start Scanning
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

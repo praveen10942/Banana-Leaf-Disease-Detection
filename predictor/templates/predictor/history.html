@@ -1,63 +1,263 @@
 {% extends "base.html" %}
-{% block title %}History — LeafAI{% endblock %}
+{% block title %}History — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .history-header {
+    animation: pageEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    background-color: var(--bg-body);
+    padding: 5px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .filter-pill {
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: var(--transition-base);
+    border: none;
+    background: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filter-pill:hover {
+    color: var(--text-main);
+    background-color: var(--bg-card);
+  }
+
+  .filter-pill.active {
+    color: white;
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  }
+
+  .filter-pill.active-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    color: white;
+  }
+
+  .filter-pill.active-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    color: white;
+  }
+
+  /* History Item */
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    transition: var(--transition-base);
+    cursor: default;
+    position: relative;
+  }
+
+  .history-item:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .history-item:hover {
+    background-color: var(--primary-light);
+  }
+
+  .history-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 14px;
+    flex-shrink: 0;
+    border: 2px solid var(--border-color);
+    transition: var(--transition-spring);
+  }
+
+  .history-item:hover .history-img {
+    transform: scale(1.05);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  }
+
+  .history-badge {
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .history-badge-healthy {
+    background: #d1fae5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+  }
+
+  .history-badge-diseased {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+  }
+
+  [data-theme="dark"] .history-badge-healthy {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+
+  [data-theme="dark"] .history-badge-diseased {
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+    border-color: rgba(252, 165, 165, 0.2);
+  }
+
+  .confidence-bar {
+    height: 4px;
+    border-radius: 4px;
+    background-color: var(--border-color);
+    width: 80px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 72px 24px;
+    text-align: center;
+  }
+
+  .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: emptyPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes emptyPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 var(--primary-glow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 12px transparent; }
+  }
+
+  .result-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    color: var(--text-light);
+    letter-spacing: 0.03em;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h5 class="fw-bold mb-0">Analysis History</h5>
-    <p class="text-muted small mb-0">Your previous leaf diagnoses</p>
+<div class="history-header">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h5 class="fw-bold mb-1" style="letter-spacing: -0.3px;">Analysis History</h5>
+      <p class="text-muted small mb-0">Your previous leaf diagnoses and scan records</p>
+    </div>
+    <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-4 py-2 d-flex align-items-center gap-2" style="border-radius: 12px;">
+      <i class="bi bi-plus-lg"></i><span class="d-none d-sm-inline">New Scan</span>
+    </a>
   </div>
-  <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-3">
-    <i class="bi bi-plus-lg me-1"></i>New Analysis
-  </a>
-</div>
 
-<div class="card p-2 mb-4">
-  <div class="d-flex gap-2">
-    <a href="{% url 'history' %}"
-       class="btn btn-sm {% if filter_type == 'all' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
-      All
-    </a>
-    <a href="{% url 'history' %}?filter=healthy"
-       class="btn btn-sm {% if filter_type == 'healthy' %}btn-success{% else %}btn-outline-secondary{% endif %} px-3">
-      <i class="bi bi-check-circle me-1"></i>Healthy
-    </a>
-    <a href="{% url 'history' %}?filter=diseased"
-       class="btn btn-sm {% if filter_type == 'diseased' %}btn-danger{% else %}btn-outline-secondary{% endif %} px-3">
-      <i class="bi bi-exclamation-triangle me-1"></i>Diseased
-    </a>
+  <!-- Filter Pills -->
+  <div class="card p-2 mb-4 border-0 shadow-sm">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="filter-pills">
+        <a href="{% url 'history' %}"
+           class="filter-pill {% if filter_type == 'all' %}active{% endif %}">
+          <i class="bi bi-grid-3x3-gap"></i> All
+        </a>
+        <a href="{% url 'history' %}?filter=healthy"
+           class="filter-pill {% if filter_type == 'healthy' %}active-success{% endif %}">
+          <i class="bi bi-check-circle"></i> Healthy
+        </a>
+        <a href="{% url 'history' %}?filter=diseased"
+           class="filter-pill {% if filter_type == 'diseased' %}active-danger{% endif %}">
+          <i class="bi bi-exclamation-triangle"></i> Diseased
+        </a>
+      </div>
+      {% if preds %}
+      <span class="result-count pe-2">{{ preds|length }} result{{ preds|length|pluralize:"s" }}</span>
+      {% endif %}
+    </div>
   </div>
 </div>
 
 {% if preds %}
-  <div class="card">
+  <div class="card overflow-hidden shadow-sm">
     {% for p in preds %}
-    <div class="d-flex align-items-center gap-3 p-3 {% if not forloop.last %}border-bottom{% endif %}">
-      <img src="{{ p.image.url }}" alt=""
-           style="width:60px; height:60px; object-fit:cover; border-radius:8px; flex-shrink:0;">
-      <div class="flex-grow-1">
-        <div class="fw-semibold">
+    <div class="history-item reveal" style="animation-delay: {{ forloop.counter0 }}00ms;">
+      <img src="{{ p.image.url }}" alt="{{ p.disease }}" class="history-img">
+      <div class="flex-grow-1 min-w-0">
+        <div class="d-flex align-items-center gap-2 mb-1">
           {% if p.is_healthy %}
-            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>{{ p.disease }}</span>
+            <span class="fw-bold" style="font-size: 0.95rem; color: #059669;">
+              <i class="bi bi-check-circle-fill me-1"></i>{{ p.disease }}
+            </span>
           {% else %}
-            <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-1"></i>{{ p.disease }}</span>
+            <span class="fw-bold" style="font-size: 0.95rem; color: #dc2626;">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ p.disease }}
+            </span>
           {% endif %}
         </div>
-        <div class="text-muted small">
-          {{ p.confidence }}% confidence &nbsp;·&nbsp; {{ p.created_at|date:"d M Y, H:i" }}
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <div class="d-flex align-items-center gap-2">
+            <span class="text-muted" style="font-size: 0.72rem; font-family: var(--font-ui);">{{ p.confidence }}%</span>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: {{ p.confidence }}%; background: {% if p.is_healthy %}linear-gradient(90deg, #10b981, #34d399){% else %}linear-gradient(90deg, #ef4444, #f87171){% endif %};"></div>
+            </div>
+          </div>
+          <span class="text-muted" style="font-size: 0.72rem; font-family: var(--font-ui);">
+            <i class="bi bi-calendar3 me-1"></i>{{ p.created_at|date:"d M Y, H:i" }}
+          </span>
         </div>
       </div>
-      <span class="badge bg-{{ p.is_healthy|yesno:'success,danger' }} rounded-pill">
+      <span class="history-badge {% if p.is_healthy %}history-badge-healthy{% else %}history-badge-diseased{% endif %}">
         {{ p.is_healthy|yesno:'Healthy,Diseased' }}
       </span>
     </div>
     {% endfor %}
   </div>
 {% else %}
-  <div class="card text-center py-5">
-    <i class="bi bi-inbox" style="font-size:2.5rem; color:#adb5bd;"></i>
-    <p class="mt-3 text-muted mb-3">No analyses found for this filter.</p>
-    <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-4">Start Analyzing</a>
+  <div class="card shadow-sm">
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-inbox text-green" style="font-size: 2rem;"></i>
+      </div>
+      <h6 class="fw-bold mb-2">No analyses found</h6>
+      <p class="text-muted small mb-4" style="max-width: 300px; margin: 0 auto;">
+        Start scanning banana leaves to build your diagnostic history and track plant health over time.
+      </p>
+      <a href="{% url 'upload' %}" class="btn btn-primary px-4 py-2" style="border-radius: 14px;">
+        <i class="bi bi-camera-fill me-2"></i>Start Scanning
+      </a>
+    </div>
   </div>
 {% endif %}
 {% endblock %}

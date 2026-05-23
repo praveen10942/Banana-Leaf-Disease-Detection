@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Terms & Conditions — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .legal-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 16px;
+  }
+  .legal-section-title i { font-size: 1.15rem; }
+
+  .legal-callout {
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .legal-callout::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+  .legal-callout.warning {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.12);
+  }
+  .legal-callout.warning::before { background: #f59e0b; }
+  [data-theme="dark"] .legal-callout.warning {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.15);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <!-- Header Hero Banner -->
+    <div class="card p-4 p-md-5 mb-4 text-center border-0 overflow-hidden position-relative reveal" style="background: linear-gradient(135deg, hsla(142, 70%, 45%, 0.12) 0%, hsla(142, 70%, 45%, 0.03) 100%);">
+      <div class="position-absolute top-0 end-0 p-3 opacity-10">
+        <i class="bi bi-file-earmark-text" style="font-size: 8rem;"></i>
+      </div>
+      <div class="position-relative z-1">
+        <div class="d-inline-flex align-items-center justify-content-center p-3 bg-green-light text-green rounded-circle mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-journal-text fs-3"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="letter-spacing: -0.5px;">Terms & Conditions</h2>
+        <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
+          Operational guidelines and mutual usage agreements between farmers, users, and the BananaGuard AI Agritech portal.
+        </p>
+        <span class="badge bg-green-light text-green mt-3 fw-semibold" style="font-family: var(--font-ui); font-size: 0.7rem;">Last Updated: May 23, 2026</span>
+      </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card p-4 p-md-5 shadow-sm">
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-check-circle-fill"></i> 1. Acceptance of Terms</h5>
+        <p>
+          By creating an account, uploading images, or accessing the BananaGuard AI crop disease diagnostic portal, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please do not use this application.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-cpu-fill"></i> 2. Service Offering and AI Constraints</h5>
+        <p>
+          BananaGuard AI utilizes deep convolutional neural networks (CNNs) trained on image datasets to estimate the presence of banana plant pathology (such as Yellow/Black Sigatoka, Moko, Panama, and Cordana leaf spots). You understand and acknowledge:
+        </p>
+        <div class="legal-callout warning">
+          <p class="small text-main mb-0 fw-medium">
+            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+            The analysis provided is statistical advice based on machine learning probability parameters. The service is provided "as is" and "as available". Predictions do not constitute professional biological, chemical, or legal agricultural advice.
+          </p>
+        </div>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-person-fill-lock"></i> 3. User Responsibilities & Acceptable Use</h5>
+        <p>As a registered farmer or guest on the portal, you agree that you will:</p>
+        <ul class="small" style="line-height: 1.8;">
+          <li class="mb-2"><strong>Legitimate Crop Imagery:</strong> Only upload high-resolution images of crop leaves (specifically banana leaves) for diagnostic purposes. Uploading spam, synthetic images, offensive material, or non-botanical photos is strictly prohibited.</li>
+          <li class="mb-2"><strong>API Security:</strong> Not attempt to reverse-engineer, exploit, or systematically scrape the diagnostics API, model endpoints, or web interface scripts.</li>
+          <li class="mb-2"><strong>Single Account Integrity:</strong> Take full responsibility for protecting your login credentials and maintaining secure authentication states.</li>
+          <li class="mb-0"><strong>Farming Safety:</strong> Implement disease prevention and cures carefully. You are solely responsible for ensuring crop chemical applications adhere to local environmental protection laws.</li>
+        </ul>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-c-circle-fill"></i> 4. Intellectual Property</h5>
+        <p>
+          All proprietary source code, deep learning model weights, UI templates, design configurations, and educational descriptions contained in BananaGuard AI are the exclusive property of BananaGuard AI and its founders. You are granted a limited, personal, non-commercial license to access the portal. You may not copy, republish, or redistribute BananaGuard AI software assets without explicit written authorization.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-x-octagon-fill"></i> 5. Limitation of Liability</h5>
+        <p>
+          In no event shall BananaGuard AI, its developers, or its founders be held liable for crop yield failures, loss of agricultural income, secondary infection spreads, improper pesticide or fertilizer application, or any direct or indirect damages arising out of your reliance on the diagnostic outcomes of this software.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-telephone-fill"></i> 6. Governing Law & Contact</h5>
+        <p class="mb-0">
+          These Terms shall be governed by your local jurisdiction laws. For inquiries, updates, or dispute resolutions, please write to us at:
+          <a href="mailto:praveenkumar10942@gmail.com" class="text-green fw-bold text-decoration-none ms-1">praveenkumar10942@gmail.com</a>.
+        </p>
+      </div>
+
+      <div class="text-center mt-4 border-top pt-4">
+        <a href="{% url 'landing' %}" class="btn btn-outline-secondary btn-sm px-4 me-2" style="border-radius: 12px;">
+          <i class="bi bi-house-door me-1"></i>Back Home
+        </a>
+        <a href="{% url 'disclaimer' %}" class="btn btn-primary btn-sm px-4" style="border-radius: 12px;">
+          <i class="bi bi-info-circle me-1"></i>Read Disclaimer
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,136 +1,495 @@
 {% extends "base.html" %}
-{% block title %}Dashboard — LeafAI{% endblock %}
+{% block title %}Dashboard — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+  /* Leaflet Map Styling */
+  #heatmap-map {
+    height: 440px;
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    z-index: 1;
+    background-color: var(--bg-body);
+  }
+  
+  .leaflet-popup-content-wrapper {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+    padding: 2px;
+  }
+  
+  .leaflet-popup-tip {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color);
+  }
+
+  .pulse-circle {
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.2));
+  }
+
+  /* Dashboard Stat Cards */
+  .dash-stat-card {
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-spring);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dash-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .dash-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+  }
+
+  .dash-stat-card.stat-total::before { background: var(--primary); }
+  .dash-stat-card.stat-healthy::before { background: #10b981; }
+  .dash-stat-card.stat-diseased::before { background: #ef4444; }
+
+  .dash-stat-value {
+    font-size: 2rem;
+    font-weight: 850;
+    font-family: var(--font-ui);
+    line-height: 1;
+  }
+
+  .dash-stat-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .dash-stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  /* Sparkline Mini Chart */
+  .sparkline-container {
+    height: 30px;
+    margin-top: 8px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .sparkline-bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    min-height: 3px;
+    transition: height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Recent Scan Item */
+  .scan-item {
+    transition: var(--transition-base);
+    border-radius: 12px;
+    padding: 12px;
+    margin: -12px;
+  }
+
+  .scan-item:hover {
+    background-color: var(--primary-light);
+  }
+
+  .scan-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    transition: var(--transition-spring);
+    flex-shrink: 0;
+  }
+
+  .scan-item:hover .scan-img {
+    transform: scale(1.08);
+    border-color: var(--primary);
+  }
+
+  /* Disease Progress */
+  .disease-progress {
+    height: 7px;
+    border-radius: 10px;
+    background-color: var(--border-color);
+    overflow: hidden;
+  }
+
+  .disease-progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Map Shimmer */
+  .map-shimmer {
+    height: 440px;
+    border-radius: 18px;
+  }
+
+  /* Tab Pills */
+  .dash-tab-pills {
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+  }
+
+  .dash-tab-pill {
+    border: none;
+    background: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .dash-tab-pill.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  }
+
+  .dash-tab-pill:not(.active):hover {
+    color: var(--text-main);
+    background: var(--bg-card);
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 reveal">
   <div>
-    <h5 class="fw-bold mb-0">Dashboard</h5>
-    <p class="text-muted small mb-0">Welcome back, {{ user.username }}</p>
+    <h5 class="fw-bold mb-1" style="letter-spacing: -0.3px;" data-i18n="dash_title">Diagnostic Analytics</h5>
+    <p class="text-muted small mb-0"><span data-i18n="dash_subtitle">Overview of crop diagnostics for</span> {{ user.username }}</p>
   </div>
-  <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-3">
-    <i class="bi bi-plus-lg me-1"></i>New Analysis
-  </a>
-</div>
-
-<div class="row g-3 mb-4">
-  <div class="col-sm-4">
-    <div class="card p-3 stat-card h-100">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <p class="text-muted small mb-1">Total Analyses</p>
-          <h3 class="fw-bold mb-0">{{ total }}</h3>
-        </div>
-        <div class="rounded-circle bg-green-light d-flex align-items-center justify-content-center"
-             style="width:44px; height:44px;">
-          <i class="bi bi-activity text-green"></i>
-        </div>
-      </div>
+  
+  <!-- Tab navigation pills -->
+  <div class="d-flex align-items-center gap-3">
+    <div class="dash-tab-pills">
+      <button class="dash-tab-pill active" id="nav-stats-tab" data-bs-toggle="tab" data-bs-target="#nav-stats" type="button">
+        <i class="bi bi-grid-1x2-fill"></i><span data-i18n="tab_analytics">Analytics</span>
+      </button>
+      <button class="dash-tab-pill" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" onclick="initOutbreakMap()">
+        <i class="bi bi-geo-alt-fill"></i><span data-i18n="tab_heatmap">Hotspots Map</span>
+      </button>
     </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="card p-3 h-100" style="border-left: 4px solid #198754;">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <p class="text-muted small mb-1">Healthy Leaves</p>
-          <h3 class="fw-bold mb-0 text-success">{{ healthy }}</h3>
-        </div>
-        <div class="rounded-circle d-flex align-items-center justify-content-center"
-             style="width:44px; height:44px; background:#d1fae5;">
-          <i class="bi bi-check-circle-fill text-success"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="card p-3 h-100" style="border-left: 4px solid #dc3545;">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <p class="text-muted small mb-1">Diseased Leaves</p>
-          <h3 class="fw-bold mb-0 text-danger">{{ diseased }}</h3>
-        </div>
-        <div class="rounded-circle d-flex align-items-center justify-content-center"
-             style="width:44px; height:44px; background:#fee2e2;">
-          <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-        </div>
-      </div>
-    </div>
+    
+    <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-3 py-2 d-flex align-items-center gap-1" style="border-radius: 12px;">
+      <i class="bi bi-camera-fill"></i><span data-i18n="btn_new_scan">New Scan</span>
+    </a>
   </div>
 </div>
 
-<div class="row g-4">
-  <div class="col-md-7">
-    <div class="card p-4 h-100">
-      <h6 class="fw-semibold mb-3">Recent Analyses</h6>
-      {% if recent %}
-        {% for p in recent %}
-        <div class="d-flex align-items-center gap-3 mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
-          <img src="{{ p.image.url }}" alt=""
-               style="width:48px; height:48px; object-fit:cover; border-radius:8px; flex-shrink:0;">
-          <div class="flex-grow-1 min-w-0">
-            <div class="fw-semibold small text-truncate">
-              {% if p.is_healthy %}
-                <span class="text-success">{{ p.disease }}</span>
-              {% else %}
-                <span class="text-danger">{{ p.disease }}</span>
-              {% endif %}
+<div class="tab-content" id="nav-tabContent">
+  <!-- Analytics Tab -->
+  <div class="tab-pane fade show active" id="nav-stats" role="tabpanel">
+    <!-- Aggregated Counters -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-4 reveal reveal-delay-1">
+        <div class="dash-stat-card stat-total">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="dash-stat-label mb-1" data-i18n="stat_total">Total Diagnostics</p>
+              <div class="dash-stat-value text-main" data-counter data-target="{{ total }}">0</div>
             </div>
-            <div class="text-muted" style="font-size:.75rem;">
-              {{ p.confidence }}% confidence · {{ p.created_at|date:"d M, H:i" }}
+            <div class="dash-stat-icon" style="background: var(--primary-light); border: 1px solid hsla(var(--primary-hsl), 0.15);">
+              <i class="bi bi-activity text-green"></i>
             </div>
           </div>
-          <span class="badge bg-{{ p.is_healthy|yesno:'success,danger' }}" style="font-size:.7rem;">
-            {{ p.is_healthy|yesno:'Healthy,Diseased' }}
-          </span>
+          <div class="sparkline-container">
+            <div class="sparkline-bar" style="height: 40%; background: var(--primary-glow);"></div>
+            <div class="sparkline-bar" style="height: 65%; background: var(--primary-glow);"></div>
+            <div class="sparkline-bar" style="height: 45%; background: var(--primary-glow);"></div>
+            <div class="sparkline-bar" style="height: 80%; background: var(--primary-glow);"></div>
+            <div class="sparkline-bar" style="height: 55%; background: var(--primary-glow);"></div>
+            <div class="sparkline-bar" style="height: 90%; background: hsla(var(--primary-hsl), 0.25);"></div>
+            <div class="sparkline-bar" style="height: 70%; background: hsla(var(--primary-hsl), 0.25);"></div>
+          </div>
         </div>
-        {% endfor %}
-        <a href="{% url 'history' %}" class="btn btn-sm btn-outline-secondary w-100 mt-1">
-          View All History
-        </a>
-      {% else %}
-        <div class="text-center text-muted py-4">
-          <i class="bi bi-inbox" style="font-size:2rem; opacity:.4;"></i>
-          <p class="mt-2 mb-3 small">No analyses yet</p>
-          <a href="{% url 'upload' %}" class="btn btn-sm btn-primary">Start Analyzing</a>
+      </div>
+      <div class="col-sm-4 reveal reveal-delay-2">
+        <div class="dash-stat-card stat-healthy">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="dash-stat-label mb-1" data-i18n="stat_healthy">Healthy Leaves</p>
+              <div class="dash-stat-value text-success" data-counter data-target="{{ healthy }}">0</div>
+            </div>
+            <div class="dash-stat-icon" style="background: #d1fae5; border: 1px solid #a7f3d0;">
+              <i class="bi bi-shield-check text-success"></i>
+            </div>
+          </div>
+          <div class="sparkline-container">
+            <div class="sparkline-bar" style="height: 60%; background: rgba(16,185,129,0.12);"></div>
+            <div class="sparkline-bar" style="height: 75%; background: rgba(16,185,129,0.12);"></div>
+            <div class="sparkline-bar" style="height: 50%; background: rgba(16,185,129,0.12);"></div>
+            <div class="sparkline-bar" style="height: 85%; background: rgba(16,185,129,0.18);"></div>
+            <div class="sparkline-bar" style="height: 45%; background: rgba(16,185,129,0.18);"></div>
+            <div class="sparkline-bar" style="height: 70%; background: rgba(16,185,129,0.18);"></div>
+            <div class="sparkline-bar" style="height: 90%; background: rgba(16,185,129,0.25);"></div>
+          </div>
         </div>
-      {% endif %}
+      </div>
+      <div class="col-sm-4 reveal reveal-delay-3">
+        <div class="dash-stat-card stat-diseased">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="dash-stat-label mb-1" data-i18n="stat_infections">Infections Found</p>
+              <div class="dash-stat-value text-danger" data-counter data-target="{{ diseased }}">0</div>
+            </div>
+            <div class="dash-stat-icon" style="background: #fee2e2; border: 1px solid #fca5a5;">
+              <i class="bi bi-exclamation-triangle text-danger"></i>
+            </div>
+          </div>
+          <div class="sparkline-container">
+            <div class="sparkline-bar" style="height: 30%; background: rgba(239,68,68,0.1);"></div>
+            <div class="sparkline-bar" style="height: 50%; background: rgba(239,68,68,0.1);"></div>
+            <div class="sparkline-bar" style="height: 40%; background: rgba(239,68,68,0.15);"></div>
+            <div class="sparkline-bar" style="height: 65%; background: rgba(239,68,68,0.15);"></div>
+            <div class="sparkline-bar" style="height: 35%; background: rgba(239,68,68,0.15);"></div>
+            <div class="sparkline-bar" style="height: 55%; background: rgba(239,68,68,0.2);"></div>
+            <div class="sparkline-bar" style="height: 45%; background: rgba(239,68,68,0.2);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Recent scans -->
+      <div class="col-md-7 reveal">
+        <div class="card p-4 h-100 shadow-sm">
+          <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-clock-history text-green"></i> <span data-i18n="card_recent_scans">Recent Field Scans</span>
+          </h6>
+          {% if recent %}
+            {% for p in recent %}
+            <div class="d-flex align-items-center gap-3 mb-3 pb-3 scan-item {% if not forloop.last %}border-bottom{% endif %}">
+              <img src="{{ p.image.url }}" alt="" class="scan-img">
+              <div class="flex-grow-1 min-w-0">
+                <div class="fw-semibold small text-truncate">
+                  {% if p.is_healthy %}
+                    <span class="text-success"><i class="bi bi-check-circle-fill me-1" style="font-size: 0.7rem;"></i>{{ p.disease }}</span>
+                  {% else %}
+                    <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-1" style="font-size: 0.7rem;"></i>{{ p.disease }}</span>
+                  {% endif %}
+                </div>
+                <div class="text-muted" style="font-size:.72rem; font-family: var(--font-ui);">
+                  {{ p.confidence }}% confidence · {{ p.created_at|date:"d M, H:i" }}
+                </div>
+              </div>
+              <span class="badge {% if p.is_healthy %}bg-success{% else %}bg-danger{% endif %}-subtle text-{% if p.is_healthy %}success{% else %}danger{% endif %} border border-{% if p.is_healthy %}success{% else %}danger{% endif %}-subtle" style="font-size:.68rem; font-weight:700; border-radius: 8px; padding: 4px 10px;">
+                {{ p.is_healthy|yesno:'Healthy,Diseased' }}
+              </span>
+            </div>
+            {% endfor %}
+            <a href="{% url 'history' %}" class="btn btn-sm btn-outline-secondary w-100 mt-1 d-block py-2" data-i18n="btn_view_history" style="border-radius: 12px;">
+              View Detailed History
+            </a>
+          {% else %}
+            <div class="text-center text-muted py-5">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                <i class="bi bi-inbox text-green" style="font-size: 1.5rem;"></i>
+              </div>
+              <p class="mt-2 mb-3 small" data-i18n="no_history">No diagnostic history found</p>
+              <a href="{% url 'upload' %}" class="btn btn-sm btn-primary" data-i18n="btn_first_scan" style="border-radius: 12px;">Scan Your First Leaf</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Disease Breakdown -->
+      <div class="col-md-5 reveal">
+        <div class="card p-4 h-100 shadow-sm">
+          <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-pie-chart text-green"></i> <span data-i18n="card_pathogens">Pathogen Spectrum</span>
+          </h6>
+          {% if disease_counts %}
+            {% for item in disease_counts %}
+            <div class="mb-3">
+              <div class="d-flex justify-content-between small mb-1">
+                <span class="fw-semibold">{{ item.disease }}</span>
+                <span class="text-muted" style="font-family: var(--font-ui); font-size: 0.72rem;">{{ item.count }}</span>
+              </div>
+              <div class="disease-progress">
+                <div class="disease-progress-fill"
+                     style="width: {% widthratio item.count diseased 100 %}%; background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center text-muted py-5">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                <i class="bi bi-pie-chart text-green" style="font-size: 1.5rem;"></i>
+              </div>
+              <p class="small mt-2 mb-0" data-i18n="no_pathogens">No pathogens detected yet</p>
+            </div>
+          {% endif %}
+
+          <div class="mt-4 pt-3 border-top">
+            <h6 class="fw-semibold mb-2 small text-muted text-uppercase" style="letter-spacing:.04em; font-size: 0.7rem; font-family: var(--font-ui);" data-i18n="lbl_quick_links">Quick Links</h6>
+            <div class="d-grid gap-2">
+              <a href="{% url 'upload' %}" class="btn btn-sm btn-primary py-2" style="border-radius: 12px;">
+                <i class="bi bi-camera me-1"></i><span data-i18n="btn_start_scan">Start Diagnostic Scan</span>
+              </a>
+              <a href="{% url 'about' %}" class="btn btn-sm btn-outline-secondary py-2" style="border-radius: 12px;">
+                <i class="bi bi-info-circle me-1"></i><span data-i18n="btn_about_ai">About the AI Core</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="col-md-5">
-    <div class="card p-4 h-100">
-      <h6 class="fw-semibold mb-3">Disease Breakdown</h6>
-      {% if disease_counts %}
-        {% for item in disease_counts %}
-        <div class="mb-3">
-          <div class="d-flex justify-content-between small mb-1">
-            <span class="fw-semibold">{{ item.disease }}</span>
-            <span class="text-muted">{{ item.count }}</span>
-          </div>
-          <div class="progress" style="height:6px;">
-            <div class="progress-bar bg-danger"
-                 style="width: {% widthratio item.count diseased 100 %}%; border-radius:4px;"></div>
-          </div>
+  <!-- Heatmap Tab -->
+  <div class="tab-pane fade" id="nav-map" role="tabpanel">
+    <div class="card p-4 shadow-sm border-0">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <h6 class="fw-bold mb-1 d-flex align-items-center gap-2">
+            <i class="bi bi-radar text-danger animate-pulse"></i> <span data-i18n="heatmap_title">Active Pathogen Outbreak Map</span>
+          </h6>
+          <p class="text-muted small mb-0" data-i18n="heatmap_desc">Real-time biosecurity coordinates mapping banana plantation diseases across key agricultural corridors.</p>
         </div>
-        {% endfor %}
-      {% else %}
-        <div class="text-center text-muted py-4">
-          <i class="bi bi-pie-chart" style="font-size:2rem; opacity:.4;"></i>
-          <p class="small mt-2 mb-0">No disease data yet</p>
+        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle fw-semibold animate-pulse d-flex align-items-center gap-1" style="font-size: 0.72rem; border-radius: 8px; padding: 6px 12px;">
+          <span class="spinner-grow spinner-grow-sm text-danger" style="width: 8px; height: 8px;"></span><span data-i18n="lbl_live">LIVE RADAR</span>
+        </span>
+      </div>
+      
+      <!-- Leaflet map container -->
+      <div id="heatmap-map"></div>
+      
+      <!-- Legend -->
+      <div class="d-flex flex-wrap gap-3 mt-3 justify-content-center small text-muted" style="font-size: 0.76rem; font-family: var(--font-ui);">
+        <div class="d-flex align-items-center gap-1">
+          <i class="bi bi-circle-fill text-danger" style="font-size: 0.5rem;"></i> <span data-i18n="legend_critical">Critical Outbreaks (Panama Wilt, Moko)</span>
         </div>
-      {% endif %}
-
-      <div class="mt-4 pt-3 border-top">
-        <h6 class="fw-semibold mb-2 small text-muted text-uppercase" style="letter-spacing:.04em;">Quick Links</h6>
-        <div class="d-grid gap-2">
-          <a href="{% url 'upload' %}" class="btn btn-sm btn-primary">
-            <i class="bi bi-search me-1"></i>Analyze New Leaf
-          </a>
-          <a href="{% url 'about' %}" class="btn btn-sm btn-outline-secondary">
-            <i class="bi bi-info-circle me-1"></i>About This System
-          </a>
+        <div class="d-flex align-items-center gap-1">
+          <i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem;"></i> <span data-i18n="legend_moderate">Moderate Severity (Sigatoka, Pests)</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <i class="bi bi-circle-fill text-success" style="font-size: 0.5rem;"></i> <span data-i18n="legend_low">Stable / Controlled Zones</span>
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  let outbreakMap = null;
+  function initOutbreakMap() {
+    // Timeout to let Bootstrap animations complete before initializing Leaflet sizes
+    setTimeout(() => {
+      if (outbreakMap) {
+        outbreakMap.invalidateSize();
+        return;
+      }
+      
+      // Center map in Central India agricultural zone
+      outbreakMap = L.map('heatmap-map').setView([20.5937, 78.9629], 5);
+      
+      const getTileUrl = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        return isDark 
+          ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' 
+          : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+      };
+      
+      let baseTileLayer = L.tileLayer(getTileUrl(), {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(outbreakMap);
+
+      // Fetch dynamic coordinates from Outbreaks API
+      fetch("{% url 'get_outbreaks' %}")
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            data.outbreaks.forEach(point => {
+              // Create dynamic radius vector
+              const markerCircle = L.circleMarker(point.coords, {
+                radius: 8 + (point.cases / 4),
+                fillColor: point.color,
+                color: point.color,
+                weight: 2,
+                opacity: 0.8,
+                fillOpacity: 0.35,
+                className: 'pulse-circle'
+              }).addTo(outbreakMap);
+
+              // Premium formatted popup with diagnostic telemetry details
+              const popupHtml = `
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px; min-width: 160px;">
+                  <div class="d-flex justify-content-between align-items-center gap-2 border-bottom pb-1 mb-2">
+                    <strong style="color: var(--text-main); font-size: 0.85rem;"><i class="bi bi-geo-alt-fill text-green me-1"></i>${point.city}</strong>
+                    <span class="badge ${point.severity === 'Critical' ? 'bg-danger' : point.severity === 'Moderate' ? 'bg-warning' : 'bg-success'} text-white" style="font-size:0.6rem; padding: 0.25em 0.5em; border-radius: 6px;">${point.severity}</span>
+                  </div>
+                  <div style="font-size: 0.75rem; line-height: 1.5; color: var(--text-muted);">
+                    <div class="mb-1"><strong style="color: var(--text-main);">Condition:</strong> ${point.disease}</div>
+                    <div class="mb-1"><strong style="color: var(--text-main);">Outbreaks:</strong> ${point.cases} reports</div>
+                    <div class="mb-0"><strong style="color: var(--text-main);">Status:</strong> <span style="color: ${point.color}; font-weight: 600;">${point.status}</span></div>
+                  </div>
+                </div>
+              `;
+              markerCircle.bindPopup(popupHtml);
+            });
+          }
+        });
+        
+      // Intercept the theme toggle function to dynamically update the map layer!
+      const originalToggleTheme = window.toggleTheme;
+      window.toggleTheme = function() {
+        if (originalToggleTheme) originalToggleTheme();
+        setTimeout(() => {
+          outbreakMap.removeLayer(baseTileLayer);
+          baseTileLayer = L.tileLayer(getTileUrl(), {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+          }).addTo(outbreakMap);
+        }, 100);
+      };
+    }, 250);
+  }
+</script>
 {% endblock %}

@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+{% block title %}Disclaimer — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .legal-layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .legal-toc {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+  }
+
+  .legal-toc-item {
+    display: block;
+    padding: 8px 14px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    text-decoration: none;
+    border-left: 2px solid var(--border-color);
+    transition: var(--transition-base);
+    margin-bottom: 2px;
+  }
+
+  .legal-toc-item:hover, .legal-toc-item.active {
+    color: var(--primary);
+    border-left-color: var(--primary);
+    background-color: var(--primary-light);
+  }
+
+  .legal-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .legal-section {
+    scroll-margin-top: 100px;
+  }
+
+  @media (max-width: 991.98px) {
+    .legal-layout { flex-direction: column; gap: 20px; }
+    .legal-toc { width: 100%; position: static; display: flex; flex-wrap: wrap; gap: 4px; }
+    .legal-toc-item { border-left: none; border-bottom: 2px solid var(--border-color); padding: 6px 12px; font-size: 0.7rem; }
+    .legal-toc-item:hover, .legal-toc-item.active { border-bottom-color: var(--primary); }
+  }
+
+  .legal-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #fee2e2;
+    margin-bottom: 16px;
+  }
+
+  .legal-section-title i {
+    color: #dc2626;
+    font-size: 1.15rem;
+  }
+
+  .legal-callout {
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .legal-callout::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .legal-callout.danger {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.12);
+  }
+
+  .legal-callout.danger::before { background: #ef4444; }
+
+  .legal-callout.warning {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.12);
+  }
+
+  .legal-callout.warning::before { background: #f59e0b; }
+
+  [data-theme="dark"] .legal-callout.danger {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.15);
+  }
+
+  [data-theme="dark"] .legal-callout.warning {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.15);
+  }
+
+  .info-grid-card {
+    padding: 20px;
+    border-radius: 16px;
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    height: 100%;
+    transition: var(--transition-base);
+  }
+
+  .info-grid-card:hover {
+    border-color: hsla(var(--primary-hsl), 0.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <!-- Header Hero Banner -->
+    <div class="card p-4 p-md-5 mb-4 text-center border-0 overflow-hidden position-relative reveal" style="background: linear-gradient(135deg, hsla(354, 70%, 45%, 0.12) 0%, hsla(354, 70%, 45%, 0.03) 100%);">
+      <div class="position-absolute top-0 end-0 p-3 opacity-10">
+        <i class="bi bi-exclamation-triangle" style="font-size: 8rem;"></i>
+      </div>
+      <div class="position-relative z-1">
+        <div class="d-inline-flex align-items-center justify-content-center p-3 bg-danger bg-opacity-10 text-danger rounded-circle mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-exclamation-octagon fs-3"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="letter-spacing: -0.5px;">Agricultural Liability Disclaimer</h2>
+        <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
+          CRITICAL INFORMATION: Please read carefully before implementing crop recommendations or relying on artificial intelligence diagnostics.
+        </p>
+        <span class="badge bg-danger bg-opacity-10 text-danger mt-3 fw-semibold" style="font-family: var(--font-ui); font-size: 0.7rem; letter-spacing: 0.05em;">Risk Disclosure Statement</span>
+      </div>
+    </div>
+
+    <!-- Main Content with ToC -->
+    <div class="legal-layout">
+      <!-- Table of Contents Sidebar -->
+      <nav class="legal-toc d-none d-lg-block">
+        <div class="mb-2 fw-bold text-muted" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-ui); padding-left: 14px;">On this page</div>
+        <a href="#sec-warning" class="legal-toc-item active">⚠️ Important Warning</a>
+        <a href="#sec-limits" class="legal-toc-item">🤖 AI Limits</a>
+        <a href="#sec-protocols" class="legal-toc-item">🧪 Field Protocols</a>
+        <a href="#sec-biosecurity" class="legal-toc-item">🔒 Biosecurity</a>
+        <a href="#sec-indemnity" class="legal-toc-item">⚖️ Indemnity</a>
+        <a href="#sec-contact" class="legal-toc-item">📞 Contact</a>
+      </nav>
+
+      <!-- Content -->
+      <div class="legal-content">
+        <div class="card p-4 p-md-5 shadow-sm">
+          
+          <!-- Warning Callout -->
+          <div class="legal-callout danger mb-4 reveal" id="sec-warning">
+            <h6 class="fw-bold mb-2 d-flex align-items-center gap-2" style="color: #dc2626;">
+              <i class="bi bi-exclamation-triangle-fill"></i>IMPORTANT WARNING FOR FARMERS
+            </h6>
+            <p class="small mb-0">
+              The disease diagnostic outcomes, probability indexes, and recommended solutions generated by BananaGuard AI are derived from a deep convolutional neural network (MobileNetV2). Artificial intelligence models are statistical approximation engines. They are subject to false positives, false negatives, and misclassifications caused by lighting variations, camera resolutions, soil dust, or leaf age. <strong>Never execute wholesale crop chemical sprays or field eradications solely based on this application.</strong>
+            </p>
+          </div>
+
+          <div class="legal-section mb-4 reveal" id="sec-limits">
+            <h5 class="legal-section-title"><i class="bi bi-cpu-fill"></i> 1. AI Recommendation Limits</h5>
+            <p>
+              Our neural network model classifies banana leaf conditions into specific categories (including Healthy, Black Sigatoka, Yellow Sigatoka, Moko, Panama, Cordana, Pestalotiopsis, Insect Pest Damage, and Bract Mosaic Virus) based on spatial patterns in leaf cells.
+            </p>
+            <div class="card bg-body-tertiary p-3 border-0 rounded-3 mb-3" style="border-radius: 16px !important;">
+              <ul class="mb-0 ps-3 small" style="line-height: 1.8;">
+                <li class="mb-2"><strong>Statistical Classifier:</strong> A high confidence percentage (e.g., 95% Black Sigatoka) means the visual patterns in the image match our trained datasets. It does not replace field biology tests.</li>
+                <li class="mb-2"><strong>Image Limitations:</strong> Obscured leaf angles, shadows, moisture, or insect bites might confuse the neural network and result in inaccurate recommendations.</li>
+                <li class="mb-0"><strong>Dynamic Environments:</strong> Weather patterns, crop genetics, and local soil conditions have immense influence on plant pathology. General AI recommendations cannot capture local nuances.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="legal-section mb-4 reveal" id="sec-protocols">
+            <h5 class="legal-section-title"><i class="bi bi-shield-exclamation"></i> 2. Field-Testing Protocols</h5>
+            <p>
+              Before applying any systemic fungicides, chemical bactericides, or biological control remedies suggested by our platform, we strongly require farmers to implement the following safeguards:
+            </p>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <div class="info-grid-card">
+                  <h6 class="fw-bold mb-2 text-main"><i class="bi bi-bezier2 text-danger me-2"></i>Small Patch Trials</h6>
+                  <p class="small text-muted mb-0" style="line-height: 1.7;">
+                    Test any suggested spray, organic compound, or neem oil preparation on a single, isolated plant leaf or small patch. Monitor the patch for 48 hours for signs of phytotoxicity or chemical burn before wider application.
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-grid-card">
+                  <h6 class="fw-bold mb-2 text-main"><i class="bi bi-people-fill text-danger me-2"></i>Expert Consultations</h6>
+                  <p class="small text-muted mb-0" style="line-height: 1.7;">
+                    Always share diagnostic photos and findings with your local government agricultural extension officer, a certified agronomist, or district plant pathologist before taking destructive actions (like rogueing or quarantines).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="legal-section mb-4 reveal" id="sec-biosecurity">
+            <h5 class="legal-section-title"><i class="bi bi-patch-exclamation-fill"></i> 3. Notifiable Biosecurity Threats</h5>
+            <p>
+              Specific banana leaf infections—most notably <strong>Panama Disease (Fusarium Wilt TR4)</strong> and <strong>Moko Bacterial Wilt</strong>—are categorized as highly infectious, devastating agricultural quarantine pests.
+            </p>
+            <div class="legal-callout warning">
+              <p class="small text-main mb-0 fw-medium">
+                <i class="bi bi-info-circle-fill text-warning me-2"></i>
+                If BananaGuard AI flags your leaf with high probability of <strong>Panama</strong> or <strong>Moko</strong> disease, you MUST report this immediately to your district quarantine officers and agronomists. Incorrect self-treatment can lead to catastrophic regional crop failures and biosecurity violations.
+              </p>
+            </div>
+          </div>
+
+          <div class="legal-section mb-4 reveal" id="sec-indemnity">
+            <h5 class="legal-section-title"><i class="bi bi-x-octagon-fill"></i> 4. Absolute Indemnity</h5>
+            <p>
+              BananaGuard AI is designed as an advisory auxiliary tool and educational platform for farmers. By using this portal, you agree to indemnify and hold harmless the founders, developers, and partners from any economic loss, crop failure, chemical misuse, land contamination, regulatory fines, or emotional distress resulting from the use or misuse of the platform's diagnostic output.
+            </p>
+          </div>
+
+          <div class="legal-section mb-4 reveal" id="sec-contact">
+            <h5 class="legal-section-title"><i class="bi bi-telephone-fill"></i> 5. Contacts & Enquiries</h5>
+            <p class="mb-0">
+              If you are an agricultural researcher, government extension officer, or farmer looking to discuss model validation or report anomalous predictions, please contact us at:
+              <a href="mailto:praveenkumar10942@gmail.com" class="text-danger fw-bold text-decoration-none ms-1">praveenkumar10942@gmail.com</a>.
+            </p>
+          </div>
+
+          <div class="text-center mt-4 border-top pt-4">
+            <a href="{% url 'landing' %}" class="btn btn-outline-secondary btn-sm px-4 me-2" style="border-radius: 12px;">
+              <i class="bi bi-house-door me-1"></i>Back Home
+            </a>
+            <a href="{% url 'upload' %}" class="btn btn-danger btn-sm px-4" style="border-radius: 12px;">
+              <i class="bi bi-camera me-1"></i>Acknowledge & Scan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ScrollSpy for ToC
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.legal-section');
+    const tocLinks = document.querySelectorAll('.legal-toc-item');
+    
+    if (sections.length === 0 || tocLinks.length === 0) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`.legal-toc-item[href="#${entry.target.id}"]`);
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Smooth scroll on toc click
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+</script>
+{% endblock %}

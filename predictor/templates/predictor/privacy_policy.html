@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .legal-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 16px;
+  }
+
+  .legal-section-title i { font-size: 1.15rem; }
+
+  .info-grid-card {
+    padding: 20px;
+    border-radius: 16px;
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    height: 100%;
+    transition: var(--transition-base);
+  }
+  .info-grid-card:hover {
+    border-color: hsla(var(--primary-hsl), 0.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <!-- Header Hero Banner -->
+    <div class="card p-4 p-md-5 mb-4 text-center border-0 overflow-hidden position-relative reveal" style="background: linear-gradient(135deg, hsla(142, 70%, 45%, 0.12) 0%, hsla(142, 70%, 45%, 0.03) 100%);">
+      <div class="position-absolute top-0 end-0 p-3 opacity-10">
+        <i class="bi bi-shield-lock" style="font-size: 8rem;"></i>
+      </div>
+      <div class="position-relative z-1">
+        <div class="d-inline-flex align-items-center justify-content-center p-3 bg-green-light text-green rounded-circle mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-shield-shaded fs-3"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="letter-spacing: -0.5px;">Privacy Policy</h2>
+        <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
+          Your agricultural data security is our top priority. Learn how BananaGuard AI collects, processes, and protects your crop images and personal information.
+        </p>
+        <span class="badge bg-green-light text-green mt-3 fw-semibold" style="font-family: var(--font-ui); font-size: 0.7rem;">Effective Date: May 23, 2026</span>
+      </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card p-4 p-md-5 shadow-sm">
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-info-circle-fill"></i> 1. Overview</h5>
+        <p>
+          At BananaGuard AI, we build technology for sustainable farming. We are committed to transparency in our data practices. This Privacy Policy describes how we handle information collected through our crop diagnostic application, particularly concerning banana leaf disease detection.
+        </p>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-camera-fill"></i> 2. Crop Image Collection & Processing</h5>
+        <p>
+          To diagnose banana leaf diseases using our deep neural network model (MobileNetV2), you must capture or upload images of banana plant leaves. Here is how your agricultural visual data is managed:
+        </p>
+        <div class="card bg-body-tertiary p-3 border-0 rounded-4 mb-3">
+          <ul class="mb-0 ps-3 small" style="line-height: 1.8;">
+            <li class="mb-2"><strong>Storage Paths:</strong> Uploaded images are securely stored on our server media directories (<code>media/</code>) and linked to your private user account database records.</li>
+            <li class="mb-2"><strong>Spatial Vector Processing:</strong> Our neural network converts uploaded image pixel matrices into normalized numerical tensors for disease class classification and matching.</li>
+            <li class="mb-2"><strong>Diagnostic History:</strong> We retain your uploaded photos and predicted diagnostic tags so you can track crop disease progress and treatment history over time through your interactive farmer dashboard.</li>
+            <li class="mb-0"><strong>Model Training:</strong> Crop images may be anonymized and used to refine, validate, and retrain our deep learning model parameters, enhancing diagnostic accuracy for all farmers globally. No personal identifier is ever bundled with images during training.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-person-badge-fill"></i> 3. Account Registration & Email Privacy</h5>
+        <p>When you sign up to track your farm diagnostics, we collect basic registration data:</p>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <div class="info-grid-card">
+              <h6 class="fw-bold mb-2 text-main"><i class="bi bi-key-fill text-green me-2"></i>Account Security</h6>
+              <p class="small text-muted mb-0" style="line-height: 1.7;">
+                User passwords are encrypted securely using Django's default PBKDF2 hashing algorithm with a SHA256 signature. We never store raw passwords on our servers.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-grid-card">
+              <h6 class="fw-bold mb-2 text-main"><i class="bi bi-envelope-fill text-green me-2"></i>Email Safeguards</h6>
+              <p class="small text-muted mb-0" style="line-height: 1.7;">
+                We collect your registered email exclusively for secure authentication and diagnostic alerts. We do not rent, sell, or share email addresses with commercial advertisers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-lock-fill"></i> 4. Data Security and Governance</h5>
+        <p>We implement rigorous security controls to guard your farm data:</p>
+        <ul class="small" style="line-height: 1.8;">
+          <li class="mb-2">Encrypted transport channels (HTTPS) secure all images, camera blobs, and credentials from mobile phone browsers to our database.</li>
+          <li class="mb-2">Strict access controls prevent unauthorized staff or external systems from accessing your specific farm diagnostics history.</li>
+          <li class="mb-0">You can request full deletion of your user profile, account details, and all diagnostic photos at any time by contacting our support team.</li>
+        </ul>
+      </div>
+
+      <div class="mb-4 reveal">
+        <h5 class="legal-section-title"><i class="bi bi-telephone-fill"></i> 5. Contact Us</h5>
+        <p class="mb-0">
+          If you have questions about this Privacy Policy, image data handling, or wish to exercise your data deletion rights, please contact the founder and Lead Developer directly at:
+          <a href="mailto:praveenkumar10942@gmail.com" class="text-green fw-bold text-decoration-none ms-1">praveenkumar10942@gmail.com</a>.
+        </p>
+      </div>
+
+      <div class="text-center mt-4 border-top pt-4">
+        <a href="{% url 'landing' %}" class="btn btn-outline-secondary btn-sm px-4 me-2" style="border-radius: 12px;">
+          <i class="bi bi-house-door me-1"></i>Back Home
+        </a>
+        <a href="{% url 'upload' %}" class="btn btn-primary btn-sm px-4" style="border-radius: 12px;">
+          <i class="bi bi-camera me-1"></i>Scan Leaf
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

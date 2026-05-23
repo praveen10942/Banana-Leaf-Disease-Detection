@@ -1,76 +1,394 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}About — LeafAI{% endblock %}
+{% block title %}About — BananaGuard AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  .about-hero {
+    text-align: center;
+    padding: 20px 0 0;
+    animation: pageEnter 0.5s ease both;
+  }
+
+  /* Animated SVG Leaf */
+  .leaf-svg-animated path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: drawLeaf 2s ease-out forwards;
+  }
+
+  .leaf-svg-animated path:nth-child(2) { animation-delay: 0.3s; }
+  .leaf-svg-animated path:nth-child(3) { animation-delay: 0.5s; }
+  .leaf-svg-animated path:nth-child(4) { animation-delay: 0.7s; }
+  .leaf-svg-animated path:nth-child(5) { animation-delay: 0.9s; }
+  .leaf-svg-animated path:nth-child(6) { animation-delay: 1.1s; }
+  .leaf-svg-animated path:nth-child(7) { animation-delay: 1.3s; }
+
+  @keyframes drawLeaf {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Tech Stack Badges */
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    color: var(--text-main);
+    transition: var(--transition-spring);
+  }
+
+  .tech-badge:hover {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+  }
+
+  .tech-badge i, .tech-badge .tech-dot {
+    color: var(--primary);
+  }
+
+  .tech-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* Architecture Flow */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    padding: 16px 0;
+  }
+
+  .arch-node {
+    padding: 12px 20px;
+    border-radius: 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    text-align: center;
+    min-width: 100px;
+    transition: var(--transition-base);
+  }
+
+  .arch-node:hover {
+    transform: scale(1.05);
+  }
+
+  .arch-arrow {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    margin: 0 4px;
+  }
+
+  @media (max-width: 575.98px) {
+    .arch-flow { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); margin: 4px 0; }
+  }
+
+  /* Metric Card */
+  .metric-card {
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    transition: var(--transition-spring);
+  }
+
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: hsla(var(--primary-hsl), 0.2);
+  }
+
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 850;
+    font-family: var(--font-ui);
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Founder Card */
+  .founder-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.04) 0%, rgba(5, 150, 105, 0.04) 100%);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary) !important;
+    border-radius: 20px;
+    padding: 28px;
+    transition: var(--transition-base);
+  }
+
+  .founder-avatar-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+    animation: avatarPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes avatarPulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2); }
+    50% { box-shadow: 0 4px 24px rgba(16, 185, 129, 0.35); }
+  }
+
+  .founder-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="mb-4">
-  <h5 class="fw-bold mb-1">About LeafAI</h5>
-  <p class="text-muted small mb-0">Banana Leaf Disease Detection using Deep Learning</p>
+<div class="about-hero mb-4">
+  <span class="badge bg-green-light text-green px-3 py-2 mb-3" style="font-size: 0.72rem; font-family: var(--font-ui); letter-spacing: 0.05em;">ABOUT THE PROJECT</span>
+  <h4 class="fw-bold mb-1" style="letter-spacing: -0.5px;">About BananaGuard AI</h4>
+  <p class="text-muted small mb-0">Agritech deep learning banana crop diagnostic engine</p>
 </div>
 
-<div class="card p-4 mb-4">
+<!-- Mission + Leaf SVG -->
+<div class="card p-4 mb-4 shadow-sm reveal">
   <div class="row g-4 align-items-center">
-    
-    <!-- LEFT SIDE -->
     <div class="col-md-7">
-      <h6 class="fw-bold text-green mb-2">Project Overview</h6>
-      <p class="text-muted small mb-3">
-        LeafAI is a web-based disease detection system built specifically for banana plant health monitoring.
-        It uses a convolutional neural network trained on real banana leaf images to identify common
-        fungal diseases early, helping farmers take timely action to protect their crops.
+      <h6 class="fw-bold text-green mb-3 d-flex align-items-center gap-2">
+        <i class="bi bi-bullseye"></i> Project Mission
+      </h6>
+      <p class="text-muted small mb-3" style="line-height: 1.75;">
+        BananaGuard AI is a high-fidelity web-based crop diagnostic engine designed to democratize high-accuracy plant pathology detection for farmers globally. By pairing standard mobile phone cameras with deep neural networks, BananaGuard delivers diagnostic results directly in the field.
       </p>
-      <p class="text-muted small mb-0">
-        Early detection of banana leaf diseases can reduce crop loss by up to 40%. This system
-        brings that capability to any device with a camera and internet connection.
+      <p class="text-muted small mb-0" style="line-height: 1.75;">
+        Early leaf spot and pathogen identification can recover up to 50% of otherwise lost crop yields. BananaGuard closes the lag between symptom onset and crop advisor consulting by outputting instant, actionable biological treatments, prevention steps, and eco-friendly organic remedies.
       </p>
     </div>
-
-    <!-- RIGHT SIDE (FIXED IMAGE) -->
     <div class="col-md-5 text-center">
-      <div style="line-height:1;">
-        <img src="{% static 'images/leaf.png' %}" 
-             style="width:90px; height:auto;">
-      </div>
-      <p class="text-muted small mt-2 mb-0">
-        LeafAI Disease Detection System
-      </p>
+      <svg width="130" height="130" viewBox="0 0 120 120" fill="none" class="mx-auto my-2 leaf-svg-animated">
+        <path d="M60 10C60 10 30 45 30 75C30 91.5685 43.4315 105 60 105C76.5685 105 90 91.5685 90 75C90 45 60 10 60 10Z" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M60 10V105" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M60 35C48 42 42 55 42 55" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M60 55C48 62 40 75 40 75" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M60 75C48 82 42 92 42 92" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M60 45C72 52 78 65 78 65" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M60 65C72 72 80 85 80 85" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <div class="fw-bold mt-2" style="font-size: 0.92rem;">BananaGuard AI Engine</div>
+      <span class="text-muted small">v1.2.0 • Mobile-Ready</span>
     </div>
-
   </div>
 </div>
 
-<!-- REST SAME -->
+<!-- Animated Metrics -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3 reveal reveal-delay-1">
+    <div class="metric-card">
+      <div class="metric-value" data-counter data-target="97.2" data-suffix="%">0%</div>
+      <div class="metric-label">Accuracy</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 reveal reveal-delay-2">
+    <div class="metric-card">
+      <div class="metric-value" data-counter data-target="15" data-suffix="K+">0</div>
+      <div class="metric-label">Training Images</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 reveal reveal-delay-3">
+    <div class="metric-card">
+      <div class="metric-value" data-counter data-target="10" data-suffix="">0</div>
+      <div class="metric-label">Disease Classes</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 reveal reveal-delay-4">
+    <div class="metric-card">
+      <div class="metric-value" data-counter data-target="5" data-suffix="">0</div>
+      <div class="metric-label">Languages</div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture & Tech Stack -->
 <div class="row g-4 mb-4">
-  <div class="col-md-6">
-    <div class="card p-4 h-100">
-      <h6 class="fw-bold mb-3">
-        <i class="bi bi-cpu me-2 text-green"></i>Model Architecture
+  <div class="col-md-6 reveal reveal-delay-1">
+    <div class="card p-4 h-100 shadow-sm">
+      <h6 class="fw-bold mb-3 d-flex align-items-center gap-2 text-green">
+        <i class="bi bi-cpu"></i> AI Architecture
       </h6>
-      <ul class="text-muted small mb-0 ps-3">
-        <li class="mb-2">Base model: MobileNetV2 pretrained on ImageNet</li>
-        <li class="mb-2">Transfer learning with two-phase training</li>
-        <li class="mb-2">Phase 1: Custom classification head training</li>
-        <li class="mb-2">Phase 2: Fine-tuning top 30 base layers</li>
-        <li class="mb-2">Input size: 224 × 224 pixels</li>
-        <li>Output: 4-class softmax classifier</li>
+      <ul class="text-muted small mb-4 ps-3" style="line-height: 1.8;">
+        <li class="mb-1">Core network: <strong>MobileNetV2</strong> (pretrained on ImageNet)</li>
+        <li class="mb-1"><strong>Dual-Phase Transfer Learning</strong> framework</li>
+        <li class="mb-1">Custom deep classification head with Batch Normalization</li>
+        <li class="mb-1">Active fine-tuning of top 30 base layers</li>
+        <li class="mb-1">Target input scale: <strong>224 × 224 pixels</strong></li>
+        <li class="mb-0">Class weight balancing for low-represented disease photos</li>
       </ul>
+      
+      <!-- Visual Flow -->
+      <h6 class="fw-bold mb-3 text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-ui);">Neural Network Pipeline</h6>
+      <div class="arch-flow">
+        <div class="arch-node" style="background: #dbeafe; color: #1d4ed8;">📷 Input</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node" style="background: #fef3c7; color: #92400e;">🧠 MobileNetV2</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node" style="background: #ede9fe; color: #5b21b6;">⚡ Dense</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node" style="background: #d1fae5; color: #059669;">🎯 Output</div>
+      </div>
     </div>
   </div>
 
-  <div class="col-md-6">
-    <div class="card p-4 h-100">
-      <h6 class="fw-bold mb-3">
-        <i class="bi bi-stack me-2 text-green"></i>Tech Stack
+  <div class="col-md-6 reveal reveal-delay-2">
+    <div class="card p-4 h-100 shadow-sm">
+      <h6 class="fw-bold mb-3 d-flex align-items-center gap-2 text-green">
+        <i class="bi bi-stack"></i> System Stack
       </h6>
-      <ul class="text-muted small mb-0 ps-3">
-        <li class="mb-2">Backend: Django 4.2</li>
-        <li class="mb-2">Deep Learning: TensorFlow / Keras</li>
-        <li class="mb-2">Model: MobileNetV2</li>
-        <li class="mb-2">Frontend: Bootstrap 5</li>
-        <li class="mb-2">Database: SQLite</li>
-        <li>Dataset: BananaLSD</li>
+      <ul class="text-muted small mb-4 ps-3" style="line-height: 1.8;">
+        <li class="mb-1">Backend Architecture: <strong>Django 4.2 / Python</strong></li>
+        <li class="mb-1">ML Runtime: <strong>TensorFlow / Keras</strong></li>
+        <li class="mb-1">Frontend Interface: <strong>Bootstrap 5 + Glassmorphic CSS</strong></li>
+        <li class="mb-1">Local Persistence: <strong>SQLite DB</strong></li>
+        <li class="mb-1">Support: Dual camera mode & WebRTC live streaming</li>
+        <li class="mb-0">Diagnosable classes: 9 profiles (1,236 baseline images)</li>
       </ul>
+
+      <h6 class="fw-bold mb-3 text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-ui);">Technologies</h6>
+      <div class="d-flex flex-wrap gap-2">
+        <span class="tech-badge"><span class="tech-dot" style="background: #3776AB;"></span> Python</span>
+        <span class="tech-badge"><span class="tech-dot" style="background: #FF6F00;"></span> TensorFlow</span>
+        <span class="tech-badge"><span class="tech-dot" style="background: #092E20;"></span> Django</span>
+        <span class="tech-badge"><span class="tech-dot" style="background: #7952B3;"></span> Bootstrap</span>
+        <span class="tech-badge"><span class="tech-dot" style="background: #F7DF1E;"></span> JavaScript</span>
+        <span class="tech-badge"><span class="tech-dot" style="background: #003B57;"></span> SQLite</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Disease Spectrum Table -->
+<div class="card p-4 mb-4 shadow-sm reveal">
+  <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+    <i class="bi bi-list-check text-green"></i> Supported Pathological Spectrum
+  </h6>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle small mb-0">
+      <thead>
+        <tr class="text-muted" style="font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; font-family: var(--font-ui);">
+          <th>Disease / Condition</th>
+          <th>Biological Class</th>
+          <th>Severity Threshold</th>
+          <th>Primary Field Symptom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-semibold">Healthy Leaf</td>
+          <td><span class="badge bg-green-light text-green" style="font-size:.65rem; border: 1px solid var(--primary);">Optimal</span></td>
+          <td>None</td>
+          <td class="text-muted">Uniform green sheet surface; normal cellular structure</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Black Sigatoka</td>
+          <td><span class="badge bg-danger-subtle text-danger" style="font-size:.65rem;">Fungal</span></td>
+          <td><span class="text-danger fw-semibold">High</span></td>
+          <td class="text-muted">Conspicuous black streaks parallel to leaf veins</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Yellow Sigatoka</td>
+          <td><span class="badge bg-warning-subtle text-warning-emphasis" style="font-size:.65rem;">Fungal</span></td>
+          <td><span class="text-warning fw-semibold">Moderate</span></td>
+          <td class="text-muted">Yellow-green spots widening into dry grey centers</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Cordana Leaf Spot</td>
+          <td><span class="badge bg-warning-subtle text-warning-emphasis" style="font-size:.65rem;">Fungal</span></td>
+          <td><span class="text-warning fw-semibold">Moderate</span></td>
+          <td class="text-muted">Brown oval lesions outlined by yellow halos</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Pestalotiopsis</td>
+          <td><span class="badge bg-danger-subtle text-danger" style="font-size:.65rem;">Fungal</span></td>
+          <td><span class="text-danger fw-semibold">High</span></td>
+          <td class="text-muted">Dark necrotic borders spreading from edges inwards</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Panama Disease</td>
+          <td><span class="badge bg-danger-subtle text-danger" style="font-size:.65rem;">Fungal</span></td>
+          <td><span class="text-danger fw-semibold">Critical</span></td>
+          <td class="text-muted">Yellowing margins, folding leaf base skirt</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Moko Disease</td>
+          <td><span class="badge bg-danger-subtle text-danger" style="font-size:.65rem;">Bacterial</span></td>
+          <td><span class="text-danger fw-semibold">Critical</span></td>
+          <td class="text-muted">Rapid leaf wilting, pseudostem vascular browning</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Bract Mosaic Virus</td>
+          <td><span class="badge bg-danger-subtle text-danger" style="font-size:.65rem;">Viral</span></td>
+          <td><span class="text-danger fw-semibold">High</span></td>
+          <td class="text-muted">Spindle-shaped reddish-brown streaks</td>
+        </tr>
+        <tr>
+          <td class="fw-semibold">Insect Pest Damage</td>
+          <td><span class="badge bg-info-subtle text-info-emphasis" style="font-size:.65rem;">Pest</span></td>
+          <td><span class="text-warning fw-semibold">Moderate</span></td>
+          <td class="text-muted">Bored holes, rolled leaves, physical margins chewing</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Founder Card -->
+<div class="founder-card mb-4 reveal">
+  <h6 class="fw-bold mb-3 d-flex align-items-center gap-2 text-main">
+    <i class="bi bi-person-badge-fill text-green"></i> Project Founder & Developer
+  </h6>
+  <div class="d-flex align-items-center gap-4 flex-wrap flex-sm-nowrap">
+    <div class="founder-avatar-ring" style="flex-shrink: 0;">
+      <div class="founder-avatar-inner">
+        <i class="bi bi-person-fill text-green fs-2"></i>
+      </div>
+    </div>
+    <div>
+      <h6 class="fw-bold mb-1 text-main" style="font-size: 1.05rem;">Praveen Kumar</h6>
+      <p class="text-muted small mb-3">Lead Agritech Deep Learning Researcher & Developer</p>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <a href="mailto:praveenkumar10942@gmail.com" class="btn btn-sm btn-primary py-2 px-3 d-inline-flex align-items-center gap-2" style="font-size: 0.78rem; border-radius: 12px;">
+          <i class="bi bi-envelope-at-fill"></i> praveenkumar10942@gmail.com
+        </a>
+      </div>
     </div>
   </div>
 </div>

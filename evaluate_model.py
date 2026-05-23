@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
 DATASET_DIR = os.path.join(BASE_DIR, 'dataset')
 SAVE_DIR    = os.path.join(BASE_DIR, 'saved_model')
-IMG_SIZE    = (128, 128)
+IMG_SIZE    = (224, 224)
 
 model = tf.keras.models.load_model(os.path.join(SAVE_DIR, 'banana_disease_model.keras'))
 
@@ -59,9 +59,10 @@ metrics = {
     'overall_accuracy': overall_accuracy,
     'total_samples': len(y_true),
     'num_classes': num_classes,
-    'model_name': 'Custom CNN (Trained from Scratch)',
+    'model_name': 'MobileNetV2 (Transfer Learning)',
     'input_size': f'{IMG_SIZE[0]} x {IMG_SIZE[1]}',
-    'architecture': '4 Conv Blocks (32→64→128→256) + GAP + Dense',
+    'architecture': 'MobileNetV2 + GAP + Dense(512) + Dense(256) + Softmax',
+    'training_phases': 'Phase 1: Frozen base → Phase 2: Fine-tune last 30 layers',
     'per_class': per_class,
 }
 
@@ -69,7 +70,10 @@ out_path = os.path.join(SAVE_DIR, 'metrics.json')
 with open(out_path, 'w') as f:
     json.dump(metrics, f, indent=2)
 
-print(f"\nOverall Accuracy: {overall_accuracy}%")
+print(f"\n{'='*60}")
+print(f"  Overall Accuracy: {overall_accuracy}%")
+print(f"  Classes: {num_classes}")
+print(f"{'='*60}")
 for cls, m in per_class.items():
-    print(f"  {cls:20s} Acc:{m['accuracy']:6.2f}%  F1:{m['f1']:6.2f}%  ({m['samples']} samples)")
+    print(f"  {cls:30s} Acc:{m['accuracy']:6.2f}%  F1:{m['f1']:6.2f}%  ({m['samples']} samples)")
 print(f"\nMetrics saved to {out_path}")

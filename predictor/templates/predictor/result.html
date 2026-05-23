@@ -4,6 +4,87 @@
 {% block extra_css %}
 <style>
   .donut-ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
+  .solution-step {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .solution-step:last-child { border-bottom: none; }
+  .step-number {
+    width: 28px; height: 28px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .tip-item {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    align-items: flex-start;
+  }
+  .type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .type-fungal { background: #fef3c7; color: #92400e; }
+  .type-bacterial { background: #fee2e2; color: #991b1b; }
+  .type-viral { background: #ede9fe; color: #5b21b6; }
+  .type-pest { background: #ffedd5; color: #9a3412; }
+  .type-none { background: #d1fae5; color: #065f46; }
+  [data-theme="dark"] .type-fungal { background: #78350f33; color: #fbbf24; }
+  [data-theme="dark"] .type-bacterial { background: #7f1d1d33; color: #fca5a5; }
+  [data-theme="dark"] .type-viral { background: #4c1d9533; color: #c4b5fd; }
+  [data-theme="dark"] .type-pest { background: #7c2d1233; color: #fdba74; }
+  [data-theme="dark"] .type-none { background: #064e3b33; color: #6ee7b7; }
+  .section-title {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .collapse-btn {
+    background: none;
+    border: none;
+    color: var(--green);
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .collapse-btn:hover { color: var(--green-dark); }
+  .severity-badge {
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 600;
+  }
+  .severity-none { background: #d1fae5; color: #065f46; }
+  .severity-moderate { background: #fef3c7; color: #92400e; }
+  .severity-high { background: #fee2e2; color: #991b1b; }
+  .severity-critical { background: #fecaca; color: #7f1d1d; border: 1px solid #f87171; }
+  [data-theme="dark"] .severity-none { background: #064e3b44; color: #6ee7b7; }
+  [data-theme="dark"] .severity-moderate { background: #78350f44; color: #fbbf24; }
+  [data-theme="dark"] .severity-high { background: #7f1d1d44; color: #fca5a5; }
+  [data-theme="dark"] .severity-critical { background: #7f1d1d66; color: #fca5a5; border-color: #ef4444; }
 </style>
 {% endblock %}
 
@@ -16,6 +97,7 @@
 </div>
 
 <div class="row g-4">
+  <!-- Left: Image + Badge -->
   <div class="col-md-5">
     <div class="card p-3 h-100">
       <img src="{{ pred.image.url }}" alt="Uploaded leaf"
@@ -29,6 +111,22 @@
           {% endif %}
           {{ info.label }}
         </span>
+
+        <!-- Disease Type Badge -->
+        <div class="mt-2">
+          {% if info.type == 'Fungal' %}
+            <span class="type-badge type-fungal"><i class="bi bi-droplet-half"></i> Fungal</span>
+          {% elif info.type == 'Bacterial' %}
+            <span class="type-badge type-bacterial"><i class="bi bi-bug"></i> Bacterial</span>
+          {% elif info.type == 'Viral' %}
+            <span class="type-badge type-viral"><i class="bi bi-shield-exclamation"></i> Viral</span>
+          {% elif info.type == 'Pest' %}
+            <span class="type-badge type-pest"><i class="bi bi-bug"></i> Pest</span>
+          {% else %}
+            <span class="type-badge type-none"><i class="bi bi-heart-pulse"></i> Healthy</span>
+          {% endif %}
+        </div>
+
         <p class="text-muted small mt-2 mb-0">
           Analyzed on {{ pred.created_at|date:"d M Y, H:i" }}
         </p>
@@ -36,7 +134,9 @@
     </div>
   </div>
 
+  <!-- Right: Diagnosis Details -->
   <div class="col-md-7">
+    <!-- Confidence Card -->
     <div class="card p-4 mb-3">
       <div class="d-flex align-items-center gap-3 mb-3">
         <div style="position:relative; width:80px; height:80px; flex-shrink:0;">
@@ -53,41 +153,50 @@
             </circle>
           </svg>
           <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-                      font-size:.85rem; font-weight:700; color:#111;">
+                      font-size:.85rem; font-weight:700; color:var(--text-main);">
             {{ raw_conf }}%
           </div>
         </div>
         <div>
           <p class="mb-1 fw-semibold">Confidence Score</p>
-          <p class="text-muted small mb-0">{{ info.description }}</p>
+          <p class="text-muted small mb-0">{{ info.description|truncatewords:25 }}</p>
         </div>
       </div>
 
       <div class="row g-2 mb-3">
-        <div class="col-6">
+        <div class="col-4">
           <div class="bg-light rounded p-2 text-center">
             <div class="small text-muted">Condition</div>
             <div class="fw-semibold small">{{ info.label }}</div>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-4">
+          <div class="bg-light rounded p-2 text-center">
+            <div class="small text-muted">Type</div>
+            <div class="fw-semibold small">{{ info.type }}</div>
+          </div>
+        </div>
+        <div class="col-4">
           <div class="bg-light rounded p-2 text-center">
             <div class="small text-muted">Severity</div>
-            <div class="fw-semibold small">{{ info.severity }}</div>
+            <div class="fw-semibold small">
+              <span class="severity-badge severity-{{ info.severity|lower }}">{{ info.severity }}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="alert alert-{{ info.color }} py-2 small mb-0">
-        <i class="bi bi-lightbulb me-1"></i>
-        <strong>Recommended Action:</strong> {{ info.action }}
+      {% if info.main_symptom %}
+      <div class="alert alert-light py-2 small mb-0" style="border-left: 3px solid var(--green);">
+        <i class="bi bi-eye me-1 text-green"></i>
+        <strong>Key Symptom:</strong> {{ info.main_symptom }}
       </div>
+      {% endif %}
     </div>
 
+    <!-- Top 3 Predictions -->
     <div class="card p-4">
-      <h6 class="fw-semibold mb-3 text-muted" style="font-size:.8rem; text-transform:uppercase; letter-spacing:.05em;">
-        Top Predictions
-      </h6>
+      <h6 class="section-title">Top Predictions</h6>
       {% for item in top3 %}
       <div class="mb-3">
         <div class="d-flex justify-content-between small mb-1">
@@ -104,6 +213,107 @@
   </div>
 </div>
 
+<!-- ────────── Treatment & Solutions Section ────────── -->
+{% if not pred.is_healthy %}
+
+<!-- What Causes This Disease -->
+{% if info.causes %}
+<div class="card p-4 mt-4">
+  <h6 class="section-title"><i class="bi bi-info-circle me-1"></i> About This Disease</h6>
+  <p class="small mb-2">{{ info.description }}</p>
+  <div class="alert alert-light py-2 small mb-0" style="border-left: 3px solid #6366f1;">
+    <i class="bi bi-question-circle me-1" style="color: #6366f1;"></i>
+    <strong>Cause:</strong> {{ info.causes }}
+  </div>
+</div>
+{% endif %}
+
+<!-- Treatment Plan -->
+{% if info.solutions %}
+<div class="card p-4 mt-3">
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h6 class="section-title mb-0"><i class="bi bi-clipboard2-pulse me-1"></i> Treatment Plan</h6>
+    {% if info.severity == 'Critical' %}
+      <span class="badge bg-danger"><i class="bi bi-exclamation-octagon me-1"></i>Urgent Action Required</span>
+    {% endif %}
+  </div>
+  <p class="text-muted small mb-3">Follow these steps to manage {{ info.label }}:</p>
+  {% for step in info.solutions %}
+  <div class="solution-step">
+    <div class="step-number">{{ forloop.counter }}</div>
+    <div class="small" style="padding-top: 4px;">{{ step }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Prevention Tips -->
+{% if info.prevention_tips %}
+<div class="card p-4 mt-3">
+  <div class="d-flex align-items-center justify-content-between">
+    <h6 class="section-title mb-0"><i class="bi bi-shield-check me-1"></i> Prevention Tips for Farmers</h6>
+    <button class="collapse-btn" type="button" data-bs-toggle="collapse" data-bs-target="#preventionTips">
+      <i class="bi bi-chevron-down" id="preventionIcon"></i> Show
+    </button>
+  </div>
+  <div class="collapse show" id="preventionTips">
+    <div class="mt-3">
+      {% for tip in info.prevention_tips %}
+      <div class="tip-item">
+        <i class="bi bi-check-circle-fill text-green mt-1" style="flex-shrink: 0;"></i>
+        <span class="small">{{ tip }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Organic Remedies -->
+{% if info.organic_remedies %}
+<div class="card p-4 mt-3">
+  <div class="d-flex align-items-center justify-content-between">
+    <h6 class="section-title mb-0"><i class="bi bi-flower1 me-1"></i> Organic / Natural Remedies</h6>
+    <button class="collapse-btn" type="button" data-bs-toggle="collapse" data-bs-target="#organicRemedies">
+      <i class="bi bi-chevron-down"></i> Show
+    </button>
+  </div>
+  <div class="collapse" id="organicRemedies">
+    <div class="mt-3">
+      {% for remedy in info.organic_remedies %}
+      <div class="tip-item">
+        <i class="bi bi-leaf text-green mt-1" style="flex-shrink: 0;"></i>
+        <span class="small">{{ remedy }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- When to Consult Expert -->
+{% if info.when_to_consult %}
+<div class="card p-4 mt-3" style="border-left: 4px solid {% if info.severity == 'Critical' %}#dc3545{% else %}#fd7e14{% endif %};">
+  <h6 class="section-title"><i class="bi bi-person-badge me-1"></i> When to Consult an Expert</h6>
+  <p class="small mb-0">{{ info.when_to_consult }}</p>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Healthy Plant Tips -->
+<div class="card p-4 mt-4" style="border-left: 4px solid var(--green);">
+  <h6 class="section-title"><i class="bi bi-emoji-smile me-1"></i> Great News! Your Plant is Healthy</h6>
+  <p class="small text-muted mb-3">Keep your banana plant thriving with these maintenance tips:</p>
+  {% for tip in info.prevention_tips %}
+  <div class="tip-item">
+    <i class="bi bi-check-circle-fill text-green mt-1" style="flex-shrink: 0;"></i>
+    <span class="small">{{ tip }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Action Buttons -->
 <div class="d-flex gap-2 mt-4">
   <a href="{% url 'upload' %}" class="btn btn-primary flex-grow-1">
     <i class="bi bi-search me-2"></i>Analyze Another Leaf
@@ -112,4 +322,21 @@
     <i class="bi bi-clock-history me-2"></i>View History
   </a>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Toggle collapse button text
+  document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
+    const target = document.querySelector(btn.getAttribute('data-bs-target'));
+    if (target) {
+      target.addEventListener('shown.bs.collapse', () => {
+        btn.innerHTML = '<i class="bi bi-chevron-up"></i> Hide';
+      });
+      target.addEventListener('hidden.bs.collapse', () => {
+        btn.innerHTML = '<i class="bi bi-chevron-down"></i> Show';
+      });
+    }
+  });
+</script>
 {% endblock %}

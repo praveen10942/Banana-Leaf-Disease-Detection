@@ -3,185 +3,1733 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}LeafAI — Banana Disease Detector{% endblock %}</title>
+  <title>{% block title %}BananaGuard AI — Smart Crop Intelligence{% endblock %}</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Frameworks -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <!-- Advanced Design System -->
   <style>
     :root {
-      --green: #2d9e4f;
-      --green-dark: #1e7a3a;
-      --green-light: #e8f5ed;
-      --nav-bg: #111827;
-      --body-bg: #f5f6fa;
-      --card-bg: #ffffff;
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --border-color: #e5e7eb;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      /* Colors (Light Mode) */
+      --primary-hsl: 142, 70%, 45%;
+      --primary: hsl(var(--primary-hsl));
+      --primary-dark: hsl(142, 72%, 35%);
+      --primary-light: hsl(142, 60%, 96%);
+      --primary-glow: hsla(var(--primary-hsl), 0.15);
+      --accent: hsl(160, 84%, 39%);
+      
+      --bg-body: #f8fafb;
+      --bg-card: #ffffff;
+      --bg-nav: #0f172a;
+      --bg-elevated: #ffffff;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --border-color: #e2e8f0;
+      --border-focus: hsla(var(--primary-hsl), 0.5);
+      
+      --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+      --card-hover-shadow: 0 12px 40px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+      --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* Glassmorphic Navbar */
+      --bg-navbar: rgba(255, 255, 255, 0.72);
+      --border-navbar: rgba(0, 0, 0, 0.06);
+      --text-navbar-brand: #0f172a;
+      --text-navbar-link: #475569;
+      --text-navbar-link-active: #16a34a;
+      --bg-navbar-link-hover: rgba(22, 163, 74, 0.06);
+
+      /* Mesh gradient colors */
+      --mesh-1: rgba(16, 185, 129, 0.06);
+      --mesh-2: rgba(5, 150, 105, 0.04);
+      --mesh-3: rgba(52, 211, 153, 0.05);
     }
+    
     [data-theme="dark"] {
-      --body-bg: #0f172a;
-      --card-bg: #1e293b;
+      --bg-body: #070b14;
+      --bg-card: #0f1729;
+      --bg-nav: #070a12;
+      --bg-elevated: #131d33;
+      
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
-      --border-color: #334155;
-      --nav-bg: #0a0f1e;
-      --green-light: #14532d33;
+      --text-light: #64748b;
+      
+      --border-color: #1e293b;
+      --primary-light: hsla(var(--primary-hsl), 0.1);
+      
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --card-hover-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.5);
+
+      --bg-navbar: rgba(7, 11, 20, 0.8);
+      --border-navbar: rgba(255, 255, 255, 0.06);
+      --text-navbar-brand: #ffffff;
+      --text-navbar-link: #94a3b8;
+      --text-navbar-link-active: #34d399;
+      --bg-navbar-link-hover: rgba(52, 211, 153, 0.08);
+
+      --mesh-1: rgba(16, 185, 129, 0.03);
+      --mesh-2: rgba(5, 150, 105, 0.02);
+      --mesh-3: rgba(52, 211, 153, 0.025);
     }
+    
+    /* ─── Animated Mesh Gradient Background ─────────────────────── */
     body {
-      background: var(--body-bg);
+      background-color: var(--bg-body);
       color: var(--text-main);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: var(--font-main);
       min-height: 100vh;
-      transition: background .3s, color .3s;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-bottom: 70px;
+      position: relative;
+      overflow-x: hidden;
     }
-    .navbar { background: var(--nav-bg) !important; border-bottom: 3px solid var(--green); }
-    .navbar-brand { font-weight: 700; color: #fff !important; letter-spacing: -.3px; }
-    .navbar-brand span { color: var(--green); }
-    .nav-link { color: #9ca3af !important; font-size: .9rem; transition: color .2s; }
-    .nav-link:hover, .nav-link.active { color: #fff !important; }
-    .btn-primary { background: var(--green); border-color: var(--green); }
-    .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
-    .btn-outline-primary { border-color: var(--green); color: var(--green); }
-    .btn-outline-primary:hover { background: var(--green); color: #fff; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(ellipse at 20% 50%, var(--mesh-1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, var(--mesh-2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, var(--mesh-3) 0%, transparent 50%);
+      animation: meshFloat 25s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes meshFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(2%, -3%) rotate(1deg); }
+      66% { transform: translate(-1%, 2%) rotate(-0.5deg); }
+    }
+
+    @media (min-width: 768px) {
+      body { padding-bottom: 0; }
+    }
+
+    /* ─── Page Entrance Animation ───────────────────────────────── */
+    .page-enter {
+      animation: pageEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes pageEnter {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Scroll Reveal System ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    /* ─── Premium Glassmorphic Navbar ───────────────────────────── */
+    .navbar {
+      background-color: var(--bg-navbar) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border-navbar);
+      padding: 0.65rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      transition: box-shadow 0.3s ease, padding 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.08);
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    [data-theme="dark"] .navbar.scrolled {
+      box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.5px;
+      color: var(--text-navbar-brand) !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .navbar-brand span {
+      background: linear-gradient(135deg, #10b981, #059669);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: var(--transition-spring);
+    }
+
+    .navbar-brand:hover .brand-logo-badge {
+      transform: rotate(-8deg) scale(1.08);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+    
+    .nav-link {
+      color: var(--text-navbar-link) !important;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem !important;
+      border-radius: 10px;
+      transition: var(--transition-base);
+      position: relative;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-navbar-link-active) !important;
+      background-color: var(--bg-navbar-link-hover);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 3px;
+      animation: activeIndicator 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes activeIndicator {
+      from { width: 0; opacity: 0; }
+      to { width: 18px; opacity: 1; }
+    }
+    
+    /* ─── Modern Card System ────────────────────────────────────── */
     .card {
       border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background-color: var(--bg-card);
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-base);
+      overflow: hidden;
+    }
+    
+    .card-hoverable:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-hover-shadow);
+      border-color: hsla(var(--primary-hsl), 0.2);
+    }
+    
+    /* ─── Dynamic Buttons ───────────────────────────────────────── */
+    .btn {
+      font-weight: 600;
+      font-family: var(--font-ui);
+      padding: 0.6rem 1.2rem;
       border-radius: 12px;
-      background: var(--card-bg);
-      box-shadow: 0 1px 8px rgba(0,0,0,.06);
+      transition: var(--transition-base);
+      position: relative;
+      overflow: hidden;
     }
-    .text-muted { color: var(--text-muted) !important; }
-    .text-green { color: var(--green) !important; }
-    .bg-light { background: var(--card-bg) !important; }
-    .bg-green-light { background: var(--green-light) !important; }
-    .border-bottom { border-color: var(--border-color) !important; }
-    .border-top { border-color: var(--border-color) !important; }
-    .stat-card { border-left: 4px solid var(--green); }
-    .form-control {
-      background: var(--card-bg);
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,255,255,0.2) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .btn:active::after {
+      opacity: 1;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border: none;
+      box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.25);
+      color: #ffffff;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 8px 25px 0 rgba(16, 185, 129, 0.35);
+      transform: translateY(-2px);
+      color: #ffffff;
+    }
+    
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px 0 rgba(16, 185, 129, 0.2);
+    }
+    
+    .btn-outline-primary {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      background-color: transparent;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    
+    .btn-outline-secondary {
+      border: 1px solid var(--border-color);
       color: var(--text-main);
-      border-color: var(--border-color);
+      background-color: transparent;
     }
-    .form-control:focus { background: var(--card-bg); color: var(--text-main); }
-    .table { color: var(--text-main); }
-    a { color: var(--green); }
-    a:hover { color: var(--green-dark); }
+    
+    .btn-outline-secondary:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    /* ─── Badges & Tags ─────────────────────────────────────────── */
+    .badge {
+      font-weight: 600;
+      font-family: var(--font-ui);
+      padding: 0.4em 0.8em;
+      border-radius: 8px;
+    }
+    
+    /* ─── Utilities ──────────────────────────────────────────────── */
+    .text-green { color: var(--primary) !important; }
+    .bg-green-light { background-color: var(--primary-light) !important; }
+    
+    /* ─── Theme Toggle Button ───────────────────────────────────── */
     .theme-btn {
-      background: none;
-      border: 1px solid #374151;
-      color: #9ca3af;
-      border-radius: 6px;
-      padding: 4px 10px;
+      background: var(--bg-navbar-link-hover);
+      border: 1px solid var(--border-navbar);
+      color: var(--text-navbar-link);
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      font-size: .85rem;
-      transition: all .2s;
+      transition: var(--transition-spring);
     }
-    .theme-btn:hover { border-color: var(--green); color: #fff; }
-    footer { background: var(--nav-bg); color: #6b7280; font-size: .85rem; }
+    
+    .theme-btn:hover {
+      background: var(--bg-navbar-link-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: rotate(15deg);
+    }
+
+    /* ─── Mobile Navigation Bottom Bar ──────────────────────────── */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background-color: var(--bg-card);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid var(--border-color);
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.06);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+    }
+    
+    .mobile-bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.68rem;
+      font-weight: 600;
+      font-family: var(--font-ui);
+      width: 60px;
+      height: 100%;
+      transition: var(--transition-base);
+      position: relative;
+    }
+    
+    .mobile-bottom-nav-item i {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+      transition: var(--transition-spring);
+    }
+    
+    .mobile-bottom-nav-item.active {
+      color: var(--primary);
+    }
+
+    .mobile-bottom-nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 24px;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 0 0 4px 4px;
+    }
+    
+    .mobile-bottom-nav-item.active i {
+      transform: translateY(-2px) scale(1.1);
+    }
+
+    .mobile-bottom-nav-item:active i {
+      transform: scale(0.85);
+    }
+    
+    /* Floating Scan FAB */
+    .mobile-scan-fab {
+      position: relative;
+      top: -18px;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 20px 0 rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white !important;
+      border: 4px solid var(--bg-card);
+      transition: var(--transition-spring);
+    }
+    
+    .mobile-scan-fab i {
+      font-size: 1.6rem;
+      margin: 0;
+    }
+    
+    .mobile-scan-fab:hover, .mobile-scan-fab:focus {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 28px 0 rgba(16, 185, 129, 0.55);
+    }
+
+    .mobile-scan-fab:active {
+      transform: scale(0.95);
+    }
+    
+    @media (min-width: 768px) {
+      .mobile-bottom-nav { display: none !important; }
+    }
+    
+    @media (max-width: 767.98px) {
+      .desktop-nav-links { display: none !important; }
+      .navbar-toggler { display: none !important; }
+      main.container { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
+      footer { margin-bottom: 60px !important; }
+    }
+    
+    /* ─── Custom Scrollbar ──────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+
+    /* Firefox scrollbar */
+    * { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+
+    /* ─── Footer ────────────────────────────────────────────────── */
+    .footer-link {
+      transition: var(--transition-base);
+      font-weight: 500;
+    }
+    .footer-link:hover {
+      color: var(--primary) !important;
+      transform: translateX(2px);
+      display: inline-block;
+    }
+
+    .footer-social-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition-spring);
+      font-size: 1rem;
+    }
+
+    .footer-social-icon:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background-color: var(--primary-light);
+      transform: translateY(-3px);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 90px;
+      left: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: var(--transition-spring);
+      z-index: 999;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 767.98px) {
+      .back-to-top { bottom: 80px; left: 12px; width: 36px; height: 36px; }
+    }
+
+    /* ─── Floating Chat Widget ──────────────────────────────────── */
+    .chat-bubble {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35), 0 0 0 0 rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1050;
+      transition: var(--transition-spring);
+      animation: chatPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes chatPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35), 0 0 0 0 rgba(16, 185, 129, 0.3); }
+      50% { box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35), 0 0 0 8px rgba(16, 185, 129, 0); }
+    }
+    
+    .chat-bubble:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+      animation: none;
+    }
+    
+    @media (max-width: 767.98px) {
+      .chat-bubble { bottom: 84px; right: 16px; width: 48px; height: 48px; font-size: 1.2rem; }
+    }
+    
+    .chat-sidebar {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 370px;
+      height: 520px;
+      border-radius: 24px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.15);
+      z-index: 1049;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.85) translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: bottom right;
+    }
+    
+    .chat-sidebar.active {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    @media (max-width: 575.98px) {
+      .chat-sidebar { width: calc(100% - 32px); right: 16px; bottom: 144px; height: 440px; }
+    }
+    
+    .chat-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .chat-messages {
+      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      animation: msgSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .chat-msg .msg-time {
+      font-size: 0.6rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .chat-msg.user .msg-time {
+      color: rgba(255,255,255,0.6);
+      text-align: right;
+    }
+    
+    @keyframes msgSlideIn {
+      from { transform: translateY(12px) scale(0.95); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    
+    .chat-msg.bot {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .chat-msg.user {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .chat-input-area {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background-color: var(--bg-card);
+    }
+    
+    .chat-input-area input {
+      flex-grow: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      font-family: var(--font-ui);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition-base);
+    }
+    
+    .chat-input-area input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    
+    .chat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 16px 12px 16px;
+      background-color: var(--bg-card);
+    }
+    
+    .chat-chip {
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: var(--font-ui);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    
+    .chat-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background-color: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    /* Typing animation */
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 6px;
+    }
+    
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--text-light);
+      border-radius: 50%;
+      animation: dotBounce 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+    
+    /* Language Select */
+    .lang-select {
+      background-color: var(--bg-navbar-link-hover);
+      border: 1px solid var(--border-navbar);
+      color: var(--text-navbar-link);
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: var(--font-ui);
+      border-radius: 10px;
+      padding: 6px 12px;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .lang-select:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .lang-select option {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    /* ─── Toast Notification System ─────────────────────────────── */
+    .toast-container {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast-notification {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 300px;
+      max-width: 420px;
+      pointer-events: auto;
+      animation: toastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toast-notification.removing {
+      animation: toastOut 0.35s ease-in both;
+    }
+
+    @keyframes toastIn {
+      from { transform: translateX(120%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes toastOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(120%); opacity: 0; }
+    }
+
+    .toast-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 0 0 14px 14px;
+      animation: toastProgress 4s linear both;
+    }
+
+    @keyframes toastProgress {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+
+    .toast-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .toast-success .toast-icon { background: #d1fae5; color: #059669; }
+    .toast-error .toast-icon { background: #fee2e2; color: #dc2626; }
+    .toast-info .toast-icon { background: #dbeafe; color: #2563eb; }
+
+    /* ─── Cursor Glow (Desktop only) ────────────────────────────── */
+    @media (hover: hover) and (pointer: fine) {
+      .cursor-glow {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle, hsla(var(--primary-hsl), 0.06) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+
+      body:hover .cursor-glow {
+        opacity: 1;
+      }
+    }
+
+    /* ─── Reading Progress Bar ──────────────────────────────────── */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #059669, #34d399);
+      z-index: 9999;
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ─── Animate Pulse Utility ─────────────────────────────────── */
+    .animate-pulse {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.95); }
+    }
+
+    /* ─── Form Controls Enhanced ────────────────────────────────── */
+    .form-control {
+      border-radius: 12px;
+      border: 1.5px solid var(--border-color);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      transition: var(--transition-base);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+      background-color: var(--bg-card);
+    }
+
+    /* ─── Shimmer Loading Skeleton ───────────────────────────────── */
+    .shimmer {
+      background: linear-gradient(90deg, var(--border-color) 25%, var(--bg-body) 50%, var(--border-color) 75%);
+      background-size: 200% 100%;
+      animation: shimmerMove 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmerMove {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ─── Dropdown menus ────────────────────────────────────────── */
+    .dropdown-menu {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
+      animation: dropIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes dropIn {
+      from { transform: translateY(-8px) scale(0.96); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
   </style>
   {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg px-4 py-2">
-  <a class="navbar-brand" href="{% url 'landing' %}">🍃 Leaf<span>AI</span></a>
-  <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navMenu">
-    <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
-      <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'landing' %}active{% endif %}" href="{% url 'landing' %}">
-          <i class="bi bi-house me-1"></i>Home
-        </a>
-      </li>
-      {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'upload' %}active{% endif %}" href="{% url 'upload' %}">
-            <i class="bi bi-search me-1"></i>Analyze
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
-            <i class="bi bi-bar-chart me-1"></i>Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}" href="{% url 'history' %}">
-            <i class="bi bi-clock-history me-1"></i>History
-          </a>
-        </li>
-      {% endif %}
-      <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'model_stats' %}active{% endif %}" href="{% url 'model_stats' %}">
-          <i class="bi bi-graph-up me-1"></i>Model Stats
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
-          <i class="bi bi-info-circle me-1"></i>About
-        </a>
-      </li>
-      <li class="nav-item ms-1">
-        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle dark/light mode">
-          <i class="bi bi-moon-stars" id="themeIcon"></i>
+  <!-- Cursor Glow Effect -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="readingProgress" style="width: 0%;"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Premium Top Navigation -->
+  <nav class="navbar navbar-expand-md py-3 px-3 px-md-5" id="mainNavbar">
+    <div class="container-fluid p-0 d-flex justify-content-between align-items-center">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'landing' %}" style="text-decoration: none;">
+        <div class="brand-logo-badge fw-bold">
+          B
+        </div>
+        <div class="d-flex flex-column align-items-start leading-none">
+          <h1 class="brand-title fw-bold mb-0" style="font-size: 1.1rem; line-height: 1.1; color: var(--text-navbar-brand);">BananaGuard AI</h1>
+          <p class="brand-subtitle mb-0" style="font-size: 0.63rem; font-weight: 500; letter-spacing: 0.03em; color: var(--text-light);">Smart Crop Intelligence</p>
+        </div>
+      </a>
+      
+      <!-- Desktop Menu Items -->
+      <div class="desktop-nav-links d-flex align-items-center gap-3">
+        <ul class="navbar-nav flex-row gap-1 align-items-center me-3">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'landing' %}active{% endif %}" href="{% url 'landing' %}" data-i18n="nav_home">Home</a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'upload' %}active{% endif %}" href="{% url 'upload' %}" data-i18n="nav_scan">Scan Leaf</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}" data-i18n="nav_dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}" href="{% url 'history' %}" data-i18n="nav_history">History</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'upload' %}active{% endif %}" href="{% url 'upload' %}" data-i18n="nav_demo">Live Demo</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}" data-i18n="nav_about">About</a>
+          </li>
+        </ul>
+        
+        <!-- Action Items -->
+        <div class="d-flex align-items-center gap-2">
+          <!-- Desktop Language Dropdown -->
+          <select class="lang-select me-1" onchange="changeLanguage(this.value)" id="langSelectDesktop">
+            <option value="en">EN</option>
+            <option value="hi">हिंदी</option>
+            <option value="ta">தமிழ்</option>
+            <option value="te">తెలుగు</option>
+            <option value="kn">ಕನ್ನಡ</option>
+          </select>
+          
+          <button class="theme-btn me-2" onclick="toggleTheme()" id="themeBtn" title="Toggle dark/light mode">
+            <i class="bi bi-moon-stars" id="themeIcon"></i>
+          </button>
+          
+          {% if user.is_authenticated %}
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle py-1 px-3 d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" style="font-size: 0.85rem;">
+                <i class="bi bi-person-circle"></i>{{ user.username }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                <li>
+                  <form method="post" action="{% url 'logout' %}" class="m-0 px-3 py-2">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-danger w-100 py-1.5 px-2 text-start" style="font-size: .8rem; border-radius: 10px;">
+                      <i class="bi bi-box-arrow-right me-1"></i>Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <a class="btn btn-outline-secondary py-1.5 px-3" style="font-size: 0.85rem;" href="{% url 'login' %}" data-i18n="nav_signin">Sign In</a>
+            <a class="btn btn-primary py-1.5 px-3" style="font-size: 0.85rem;" href="{% url 'register' %}" data-i18n="nav_getstarted">Get Started</a>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Mobile Quick Actions -->
+      <div class="d-flex d-md-none align-items-center gap-2">
+        <!-- Mobile Language Dropdown -->
+        <select class="lang-select me-1" onchange="changeLanguage(this.value)" id="langSelectMobile">
+          <option value="en">EN</option>
+          <option value="hi">हिंदी</option>
+          <option value="ta">தமிழ்</option>
+          <option value="te">తెలుగు</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+        
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtnMobile" title="Toggle dark/light mode">
+          <i class="bi bi-moon-stars" id="themeIconMobile"></i>
         </button>
-      </li>
-      {% if user.is_authenticated %}
-        <li class="nav-item ms-2 d-flex align-items-center gap-2">
-          <span class="text-secondary small"><i class="bi bi-person-circle me-1"></i>{{ user.username }}</span>
+        {% if user.is_authenticated %}
           <form method="post" action="{% url 'logout' %}" class="m-0">
             {% csrf_token %}
-            <button class="btn btn-sm btn-outline-light py-1 px-3" style="font-size:.8rem;">Logout</button>
+            <button class="btn btn-sm btn-outline-danger px-2.5 py-1" style="font-size: .75rem;" title="Logout">
+              <i class="bi bi-box-arrow-right"></i>
+            </button>
           </form>
-        </li>
-      {% else %}
-        <li class="nav-item ms-2">
-          <a class="btn btn-sm btn-outline-light py-1 px-3" href="{% url 'login' %}">Sign In</a>
-        </li>
-        <li class="nav-item ms-1">
-          <a class="btn btn-sm btn-primary py-1 px-3" href="{% url 'register' %}">Get Started</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
-</nav>
-
-<main class="container py-4" style="max-width: 860px;">
-  {% if messages %}
-    {% for m in messages %}
-      <div class="alert alert-{{ m.tags }} alert-dismissible fade show py-2 small">
-        {{ m }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {% else %}
+          <a class="btn btn-sm btn-primary px-3 py-1" style="font-size: 0.75rem;" href="{% url 'login' %}" data-i18n="nav_signin">Sign In</a>
+        {% endif %}
       </div>
-    {% endfor %}
-  {% endif %}
-  {% block content %}{% endblock %}
-</main>
+    </div>
+  </nav>
 
-<footer class="text-center py-4 mt-5">
-  <div class="container">
-    <p class="mb-1">LeafAI — Banana Leaf Disease Detection System</p>
-    <p class="mb-0" style="font-size:.78rem;">Built with Django &amp; MobileNetV2 Transfer Learning</p>
+  <!-- Main Container -->
+  <main class="{% block main_class %}container py-4{% endblock %} flex-grow-1 page-enter" style="{% block main_style %}max-width: 860px;{% endblock %}">
+    {% if messages %}
+      {% for m in messages %}
+        <div class="alert alert-{% if m.tags == 'error' %}danger{% else %}{{ m.tags }}{% endif %} alert-dismissible fade show py-2.5 px-4 mb-4 rounded-3 border-0 shadow-sm" role="alert" style="animation: pageEnter 0.4s ease both;">
+          <div class="d-flex align-items-center gap-2">
+            {% if m.tags == 'success' %}
+              <i class="bi bi-check-circle-fill text-success fs-5"></i>
+            {% elif m.tags == 'error' or m.tags == 'danger' %}
+              <i class="bi bi-exclamation-octagon-fill text-danger fs-5"></i>
+            {% else %}
+              <i class="bi bi-info-circle-fill text-info fs-5"></i>
+            {% endif %}
+            <span class="small fw-medium">{{ m }}</span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <div class="mobile-bottom-nav">
+    <a href="{% url 'landing' %}" class="mobile-bottom-nav-item {% if request.resolver_match.url_name == 'landing' %}active{% endif %}">
+      <i class="bi bi-house-door"></i>
+      <span data-i18n="nav_home">Home</span>
+    </a>
+    
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}" class="mobile-bottom-nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="bi bi-grid-1x2"></i>
+        <span data-i18n="nav_dashboard">Dashboard</span>
+      </a>
+      
+      <a href="{% url 'upload' %}" class="mobile-scan-fab" title="Scan Banana Leaf">
+        <i class="bi bi-camera-fill"></i>
+      </a>
+      
+      <a href="{% url 'history' %}" class="mobile-bottom-nav-item {% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+        <i class="bi bi-clock-history"></i>
+        <span data-i18n="nav_history">History</span>
+      </a>
+    {% else %}
+      <a href="{% url 'upload' %}" class="mobile-scan-fab" title="Try Live Demo">
+        <i class="bi bi-camera-fill"></i>
+      </a>
+      
+      <a href="{% url 'register' %}" class="mobile-bottom-nav-item">
+        <i class="bi bi-person-plus"></i>
+        <span data-i18n="nav_joinus">Join Us</span>
+      </a>
+    {% endif %}
+    
+    <a href="{% url 'about' %}" class="mobile-bottom-nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+      <i class="bi bi-info-circle"></i>
+      <span data-i18n="nav_about">About</span>
+    </a>
   </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('themeIcon').className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun';
-    localStorage.setItem('leafai-theme', isDark ? 'light' : 'dark');
-  }
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+    <i class="bi bi-chevron-up"></i>
+  </button>
 
-  (function() {
-    const saved = localStorage.getItem('leafai-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', saved);
-    const icon = document.getElementById('themeIcon');
-    if (icon) icon.className = saved === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
-  })();
-</script>
-{% block extra_js %}{% endblock %}
+  <!-- Enhanced Footer -->
+  <footer id="contact" class="py-5 mt-5 border-top border-light-subtle" style="background-color: var(--bg-card); transition: var(--transition-base);">
+    <div class="container px-4 px-md-5">
+      <div class="row g-4 text-start">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-logo-badge fw-bold" style="width: 32px; height: 32px; font-size: 0.9rem; border-radius: 10px;">B</div>
+            <h5 class="fw-bold text-main mb-0" style="font-size: 1.15rem;">BananaGuard AI</h5>
+          </div>
+          <p class="text-muted small mb-3" style="line-height: 1.7;">
+            AI-powered smart agriculture platform for banana disease detection and crop intelligence. Designed for farmers, agritech companies, and smart ag ecosystems.
+          </p>
+          <!-- Social Icons -->
+          <div class="d-flex gap-2 mb-3">
+            <a href="#" class="footer-social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-github"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-youtube"></i></a>
+          </div>
+          <p class="mb-0 text-muted" style="font-size: 0.72rem;">
+            Powered by MobileNetV2 Neural Network • 10 Disease Classes
+          </p>
+        </div>
+
+        <div class="col-6 col-md-2 offset-md-1">
+          <h6 class="fw-bold text-main mb-3" style="font-size: 0.85rem;">Company</h6>
+          <ul class="list-unstyled space-y-2 text-muted small">
+            <li class="mb-2"><a href="{% url 'about' %}" class="text-decoration-none text-muted footer-link">About Us</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted footer-link">Careers</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted footer-link">Research</a></li>
+            <li class="mb-0"><a href="#" class="text-decoration-none text-muted footer-link">Partners</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold text-main mb-3" style="font-size: 0.85rem;">Resources</h6>
+          <ul class="list-unstyled space-y-2 text-muted small">
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted footer-link">Documentation</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted footer-link">API Access</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none text-muted footer-link">Support</a></li>
+            <li class="mb-0"><a href="{% url 'privacy_policy' %}" class="text-decoration-none text-muted footer-link">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-3">
+          <h6 class="fw-bold text-main mb-3" style="font-size: 0.85rem;">Contact</h6>
+          <ul class="list-unstyled space-y-2 text-muted small">
+            <li class="mb-2"><i class="bi bi-envelope-fill text-green me-2"></i>hello@bananaguard.ai</li>
+            <li class="mb-2"><i class="bi bi-telephone-fill text-green me-2"></i>+91 98765 43210</li>
+            <li class="mb-3"><i class="bi bi-geo-alt-fill text-green me-2"></i>India</li>
+          </ul>
+          <!-- Newsletter Mockup -->
+          <div class="d-flex gap-2">
+            <input type="email" class="form-control form-control-sm" placeholder="Your email" style="font-size: 0.75rem; padding: 0.4rem 0.7rem; border-radius: 8px;">
+            <button class="btn btn-primary btn-sm px-3" style="font-size: 0.72rem; border-radius: 8px; white-space: nowrap;">Subscribe</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4 border-light-subtle">
+
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+        <p class="mb-0 text-muted small">
+          © 2026 BananaGuard AI. All rights reserved.
+        </p>
+        <div class="d-flex gap-3 align-items-center" style="font-size: 0.78rem;">
+          <a href="{% url 'privacy_policy' %}" class="text-decoration-none text-muted footer-link">Privacy Policy</a>
+          <span class="text-light opacity-50">•</span>
+          <a href="{% url 'terms_conditions' %}" class="text-decoration-none text-muted footer-link">Terms & Conditions</a>
+          <span class="text-light opacity-50">•</span>
+          <a href="{% url 'cookie_policy' %}" class="text-decoration-none text-muted footer-link">Cookie Policy</a>
+          <span class="text-light opacity-50">•</span>
+          <a href="{% url 'disclaimer' %}" class="text-decoration-none text-muted footer-link">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LeafyBot Chat Widget -->
+  <div class="chat-bubble" onclick="toggleChat()" id="chatBubble" title="Chat with LeafyBot">
+    <i class="bi bi-chat-dots-fill"></i>
+  </div>
+  
+  <div class="chat-sidebar" id="chatSidebar">
+    <div class="chat-header">
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle d-flex" style="width: 32px; height: 32px; align-items:center; justify-content:center; background: linear-gradient(135deg, #10b981, #059669);">
+          <i class="bi bi-robot" style="font-size: 1rem; color: white;"></i>
+        </div>
+        <div>
+          <span class="fw-bold d-block mb-0" style="font-size: 0.88rem;" data-i18n="bot_title">LeafyBot Assistant</span>
+          <span style="font-size: 0.62rem; color: #34d399; font-weight: 600;"><i class="bi bi-circle-fill me-1 animate-pulse" style="font-size: 0.4rem;"></i><span data-i18n="bot_online">Online</span></span>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white" onclick="toggleChat()" style="font-size: 0.7rem;"></button>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <span data-i18n="bot_welcome">Hello! I am LeafyBot, your AI farming assistant. 🍃 Ask me anything about banana diseases, symptoms, or organic treatments!</span>
+        <span class="msg-time">Just now</span>
+      </div>
+    </div>
+    
+    <div class="chat-chips">
+      <div class="chat-chip" onclick="sendQuickPrompt('What is Black Sigatoka?')" data-i18n="chip_sigatoka">Black Sigatoka</div>
+      <div class="chat-chip" onclick="sendQuickPrompt('How to cure Panama Wilt?')" data-i18n="chip_panama">Panama Wilt</div>
+      <div class="chat-chip" onclick="sendQuickPrompt('Explain Moko Disease')" data-i18n="chip_moko">Moko Disease</div>
+      <div class="chat-chip" onclick="sendQuickPrompt('Organic remedies')" data-i18n="chip_organic">Organic Care</div>
+    </div>
+    
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key === 'Enter') sendMessage()" data-i18n-placeholder="chat_placeholder">
+      <button class="btn btn-primary p-2 d-flex align-items-center justify-content-center" onclick="sendMessage()" style="width: 38px; height: 38px; border-radius: 12px;">
+        <i class="bi bi-send-fill" style="font-size: 0.9rem;"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ── Translation Engine & Registry ──────────────────────────────────────
+    const translations = {
+      en: {
+        nav_home: "Home",
+        nav_scan: "Scan Leaf",
+        nav_demo: "Live Demo",
+        nav_dashboard: "Dashboard",
+        nav_history: "History",
+        nav_about: "About",
+        nav_signin: "Sign In",
+        nav_getstarted: "Get Started",
+        nav_joinus: "Join Us",
+        footer_title: "🍃 LeafAI — The Agritech Crop Diagnostic Engine",
+        footer_desc: "Powered by MobileNetV2 Neural Network • Real-time Diagnostic Delivery • 9 Disease Profiles",
+        bot_title: "LeafyBot Assistant",
+        bot_online: "Online",
+        bot_welcome: "Hello! I am LeafyBot, your AI farming assistant. 🍃 Ask me anything about banana diseases, symptoms, or organic treatments!",
+        chip_sigatoka: "Black Sigatoka",
+        chip_panama: "Panama Wilt",
+        chip_moko: "Moko Disease",
+        chip_organic: "Organic Care",
+        chat_placeholder: "Type a message...",
+        
+        // Dashboard Translations
+        dash_title: "Diagnostic Analytics",
+        dash_subtitle: "Overview of crop diagnostics for",
+        tab_analytics: "Analytics",
+        tab_heatmap: "Hotspots Map",
+        btn_new_scan: "New Scan",
+        stat_total: "Total Diagnostics",
+        stat_healthy: "Healthy Leaves",
+        stat_infections: "Infections Found",
+        card_recent_scans: "Recent Field Scans",
+        btn_view_history: "View Detailed History",
+        no_history: "No diagnostic history found",
+        btn_first_scan: "Scan Your First Leaf",
+        card_pathogens: "Pathogen Spectrum",
+        no_pathogens: "No pathogens detected yet",
+        lbl_quick_links: "Quick Links",
+        btn_start_scan: "Start Diagnostic Scan",
+        btn_about_ai: "About the AI Core",
+        heatmap_title: "Active Pathogen Outbreak Map",
+        heatmap_desc: "Real-time biosecurity coordinates mapping banana plantation diseases across key agricultural corridors.",
+        lbl_live: "LIVE RADAR",
+        legend_critical: "Critical Outbreaks (Panama Wilt, Moko)",
+        legend_moderate: "Moderate Severity (Sigatoka, Pests)",
+        legend_low: "Stable / Controlled Zones"
+      },
+      hi: {
+        nav_home: "होम",
+        nav_scan: "पत्ती स्कैन करें",
+        nav_demo: "लाइव डेमो",
+        nav_dashboard: "डैशबोर्ड",
+        nav_history: "इतिहास",
+        nav_about: "हमारे बारे में",
+        nav_signin: "साइन इन",
+        nav_getstarted: "शुरू करें",
+        nav_joinus: "हमारे साथ जुड़ें",
+        footer_title: "🍃 लीफएआई — एग्रीटेक फसल निदान इंजन",
+        footer_desc: "मोबाइलनैटवी2 न्यूरल नेटवर्क द्वारा संचालित • वास्तविक समय निदान वितरण • 9 रोग प्रोफाइल",
+        bot_title: "लीफीबॉट सहायक",
+        bot_online: "ऑनलाइन",
+        bot_welcome: "नमस्ते! मैं लीफ़ीबॉट हूँ, आपका एआई कृषि सहायक। 🍃 मुझसे केले की बीमारियों, लक्षणों या जैविक उपचार के बारे में कुछ भी पूछें!",
+        chip_sigatoka: "ब्लैक सिगाटोका",
+        chip_panama: "पनामा विल्ट",
+        chip_moko: "मोको रोग",
+        chip_organic: "जैविक देखभाल",
+        chat_placeholder: "एक संदेश टाइप करें...",
+        dash_title: "निदानात्मक विश्लेषण",
+        dash_subtitle: "फसल निदान का अवलोकन",
+        tab_analytics: "विश्लेषण",
+        tab_heatmap: "हॉटस्पॉट मानचित्र",
+        btn_new_scan: "नया स्कैन",
+        stat_total: "कुल निदान",
+        stat_healthy: "स्वस्थ पत्तियां",
+        stat_infections: "संक्रमण मिले",
+        card_recent_scans: "हाल के फ़ील्ड स्कैन",
+        btn_view_history: "विस्तृत इतिहास देखें",
+        no_history: "कोई निदान इतिहास नहीं मिला",
+        btn_first_scan: "अपनी पहली पत्ती स्कैन करें",
+        card_pathogens: "रोगज़नक़ स्पेक्ट्रम",
+        no_pathogens: "अभी तक कोई रोगज़नक़ नहीं मिला",
+        lbl_quick_links: "त्वरित लिंक्स",
+        btn_start_scan: "निदान स्कैन शुरू करें",
+        btn_about_ai: "एआई कोर के बारे में",
+        heatmap_title: "सक्रिय रोगज़नक़ प्रकोप मानचित्र",
+        heatmap_desc: "प्रमुख कृषि गलियारों में केले के बागानों के रोगों का वास्तविक समय जैव-सुरक्षा निर्देशांक मानचित्रण।",
+        lbl_live: "लाइव रडार",
+        legend_critical: "गंभीर प्रकोप (पनामा विल्ट, मोको)",
+        legend_moderate: "मध्यम तीव्रता (सिगाटोका, कीट)",
+        legend_low: "स्थिर / नियंत्रित क्षेत्र"
+      },
+      ta: {
+        nav_home: "முகப்பு",
+        nav_scan: "இலை ஸ்கேன்",
+        nav_demo: "நேரடி டெமோ",
+        nav_dashboard: "டாஷ்போர்டு",
+        nav_history: "வரலாறு",
+        nav_about: "பற்றி",
+        nav_signin: "உள்நுழைக",
+        nav_getstarted: "தொடங்குங்கள்",
+        nav_joinus: "எங்களுடன் இணையுங்கள்",
+        footer_title: "🍃 லீஃப்ஏஐ — அக்ரிடெக் பயிர் கண்டறியும் இயந்திரம்",
+        footer_desc: "மொபைல்நெட்வி2 நியூரல் நெட்வொர்க் மூலம் இயக்கப்படுகிறது • நிகழ்நேர நோய் கண்டறிதல் • 9 நோய் சுயவிவரங்கள்",
+        bot_title: "லீஃபிபாட் உதவியாளர்",
+        bot_online: "ஆன்லைன்",
+        bot_welcome: "வணக்கம்! நான் லீஃபிபாட், உங்கள் எஐ விவசாய உதவியாளர். 🍃 வாழை நோய்கள், அறிகுறிகள் அல்லது இயற்கை சிகிச்சைகள் பற்றி என்னிடம் எதையும் கேளுங்கள்!",
+        chip_sigatoka: "பிளாக் சிகடோகா",
+        chip_panama: "பனாமா வாடல்",
+        chip_moko: "மோகோ நோய்",
+        chip_organic: "இயற்கை பராமரிப்பு",
+        chat_placeholder: "செய்தியை தட்டச்சு செய்க...",
+        dash_title: "பகுப்பாய்வு டாஷ்போர்டு",
+        dash_subtitle: "பயிர் கண்டறிதல் கண்ணோட்டம்",
+        tab_analytics: "பகுப்பாய்வு",
+        tab_heatmap: "வெப்ப வரைபடம்",
+        btn_new_scan: "புதிய ஸ்கேன்",
+        stat_total: "மொத்த நோய் கண்டறிதல்",
+        stat_healthy: "ஆரோக்கியமான இலைகள்",
+        stat_infections: "கண்டறியப்பட்ட நோய்கள்",
+        card_recent_scans: "சமீபத்திய இலை ஸ்கேன்கள்",
+        btn_view_history: "விரிவான வரலாறு",
+        no_history: "வரலாறு எதுவும் இல்லை",
+        btn_first_scan: "முதல் இலையை ஸ்கேன் செய்க",
+        card_pathogens: "நோய் ஸ்பெக்ட்ரம்",
+        no_pathogens: "நோய்கள் எதுவும் இன்னும் கண்டறியப்படவில்லை",
+        lbl_quick_links: "விரைவு இணைப்புகள்",
+        btn_start_scan: "ஸகேனைத் தொடங்குக",
+        btn_about_ai: "எஐ தொழில்நுட்பம் பற்றி",
+        heatmap_title: "வாழை நோய் பரவல் வரைபடம்",
+        heatmap_desc: "முக்கிய விவசாயப் பகுதிகளில் வாழைத் தோட்ட நோய்களை நிகழ்நேரத்தில் காட்டும் வரைபடம்.",
+        lbl_live: "நேரடி ரேடார்",
+        legend_critical: "மிகக் கடுமையான நோய்கள் (பனாமா வாடல், மோகோ)",
+        legend_moderate: "நடுத்தர நோய்கள் (சிகடோகா, பூச்சிகள்)",
+        legend_low: "கட்டுப்படுத்தப்பட்ட பகுதிகள்"
+      },
+      te: {
+        nav_home: "హోమ్",
+        nav_scan: "ఆకును స్కాన్ చేయి",
+        nav_demo: "లైవ్ డెమో",
+        nav_dashboard: "డ్యాష్‌బోర్డ్",
+        nav_history: "చరిత్ర",
+        nav_about: "మా గురించి",
+        nav_signin: "సైన్ ఇన్",
+        nav_getstarted: "ప్రారంభించండి",
+        nav_joinus: "కలవండి",
+        footer_title: "🍃 లీఫ్ఎఐ — అగ్రిటెక్ పంట వ్యాధి నిర్ధారణ ఇంజిన్",
+        footer_desc: "మొబైల్‌నెట్వి2 న్యూరల్ నెట్‌వర్క్ ద్వారా నడపబడుతోంది • నిజ-సమయ వ్యాధి నిర్ధారణ • 9 వ్యాధి ప్రొఫైల్స్",
+        bot_title: "లీఫీబాట్ సహాయకుడు",
+        bot_online: "ఆన్‌లైన్",
+        bot_welcome: "నమస్కారం! నేను లీఫీబాట్, మీ ఎఐ వ్యవసాయ సహాయకుడిని. 🍃 అరటి వ్యాధులు, లక్షణాలు లేదా సేంద్రీయ చికిత్సల గురించి నన్ను ఏదైనా అడగండి!",
+        chip_sigatoka: "బ్లాక్ సిగాటోకా",
+        chip_panama: "పనామా విల్ట్",
+        chip_moko: "మోకో వ్యాధి",
+        chip_organic: "సేంద్రీయ సంరక్షణ",
+        chat_placeholder: "సందేశాన్ని టైప్ చేయండి...",
+        dash_title: "వ్యాధి నిర్ధారణ విశ్లేషణ",
+        dash_subtitle: "పంట వ్యాధి నిర్ధారణ అవలోకనం",
+        tab_analytics: "విశ్లేషణ",
+        tab_heatmap: "హాట్‌స్పాట్ మ్యాప్",
+        btn_new_scan: "కొత్త స్కాన్",
+        stat_total: "మొత్తం వ్యాధి నిర్ధారణలు",
+        stat_healthy: "ఆరోగ్యకరమైన ఆకులు",
+        stat_infections: "కనుగొన్న వ్యాధులు",
+        card_recent_scans: "ఇటీవలి ఫీల్డ్ స్కాన్‌లు",
+        btn_view_history: "వివరమైన చరిత్రను చూడండి",
+        no_history: "వ్యాధి నిర్ధారణ చరిత్ర లేదు",
+        btn_first_scan: "మీ మొదటి ఆకును స్కాన్ చేయండి",
+        card_pathogens: "వ్యాధికారక వర్ణపటం",
+        no_pathogens: "ఇంకా వ్యాధులు కనుగొనబడలేదు",
+        lbl_quick_links: "త్వరిత లింకులు",
+        btn_start_scan: "నిర్ధారణ స్కాన్ ప్రారంభించండి",
+        btn_about_ai: "ఎఐ కోర్ గురించి",
+        heatmap_title: "యాక్టివ్ వ్యాధికారక వ్యాప్తి మ్యాప్",
+        heatmap_desc: "కీలక వ్యవసాయ ప్రాంతాలలో అరటి తోటల వ్యాధులను నిజ-సమయంలో చూపించే మ్యాప్.",
+        lbl_live: "లైవ్ రాడార్",
+        legend_critical: "తీవ్రమైన వ్యాప్తి (పనామా విల్ట్, మోకో)",
+        legend_moderate: "మధ్యస్థ తీవ్రత (సిగాటోకా, కీటకాలు)",
+        legend_low: "స్థిరమైన / నియంత్రిత ప్రాంతాలు"
+      },
+      kn: {
+        nav_home: "ಮುಖಪುಟ",
+        nav_scan: "ಎಲೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
+        nav_demo: "ನೇರ ಡೆಮೊ",
+        nav_dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+        nav_history: "ಇತಿಹಾಸ",
+        nav_about: "ನಮ್ಮ ಬಗ್ಗೆ",
+        nav_signin: "ಸೈನ್ ಇನ್",
+        nav_getstarted: "ಪ್ರಾರಂಭಿಸಿ",
+        nav_joinus: "ನಮ್ಮೊಂದಿಗೆ ಸೇರಿ",
+        footer_title: "🍃 LeafAI — ಕೃಷಿ ತಂತ್ರಜ್ಞಾನ ಬೆಳೆ ರೋಗನಿರ್ಣಯ ಎಂಜಿನ್",
+        footer_desc: "MobileNetV2 ನ್ಯೂರಲ್ ನೆಟ್‌ವರ್ಕ್‌ನಿಂದ ಚಾಲಿತವಾಗಿದೆ • ನೈಜ-ಸಮಯದ ರೋಗನಿರ್ಣಯ ವಿತರಣೆ • 9 ರೋಗ ಪ್ರೊಫೈಲ್‌ಗಳು",
+        bot_title: "ಲೀಫಿಬಾಟ್ ಸಹಾಯಕ",
+        bot_online: "ಆನ್‌ಲೈನ್",
+        bot_welcome: "ಹಲೋ! ನಾನು ಲೀಫಿಬಾಟ್, ನಿಮ್ಮ ಎಐ ಕೃಷಿ ಸಹಾಯಕ. 🍃 ಬಾಳೆಹಣ್ಣಿನ ರೋಗಗಳು, ಲಕ್ಷಣಗಳು ಅಥವಾ ಸಾವಯವ ಚಿಕಿತ್ಸೆಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಏನಾದರೂ ಕೇಳಿ!",
+        chip_sigatoka: "ಬ್ಲ್ಯಾಕ್ ಸಿಗಾಟೋಕಾ",
+        chip_panama: "ಪನಾಮಾ ಬಾಡುವಿಕೆ",
+        chip_moko: "ಮೊಕೊ ರೋಗ",
+        chip_organic: "ಸಾವಯವ ಆರೈಕೆ",
+        chat_placeholder: "ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ...",
+        dash_title: "ರೋಗನಿರ್ಣಯದ ವಿಶ್ಲೇಷಣೆ",
+        dash_subtitle: "ಬೆಳೆ ರೋಗನಿರ್ಣಯದ ಅವಲೋಕನ",
+        tab_analytics: "ವಿಶ್ಲೇಷಣೆ",
+        tab_heatmap: "ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳ ನಕ್ಷೆ",
+        btn_new_scan: "ಹೊಸ ಸ್ಕ್ಯಾನ್",
+        stat_total: "ಒಟ್ಟು ರೋಗನಿರ್ಣಯಗಳು",
+        stat_healthy: "ಆರೋಗ್ಯಕರ ಎಲೆಗಳು",
+        stat_infections: "ಕಂಡುಬಂದ ಸೋಂಕುಗಳು",
+        card_recent_scans: "ಇತ್ತೀಚಿನ ಫೀಲ್ಡ್ ಸ್ಕಾನ್‌ಗಳು",
+        btn_view_history: "ವಿವರವಾದ ಇತಿಹಾಸವನ್ನು ವೀಕ್ಷಿಸಿ",
+        no_history: "ಯಾವುದೇ ರೋಗನಿರ್ಣಯದ ಇತಿಹಾಸ ಕಂಡುಬಂದಿಲ್ಲ",
+        btn_first_scan: "ನಿಮ್ಮ ಮೊದಲ ಎಲೆಯನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
+        card_pathogens: "ರೋಗಕಾರಕ ಸ್ಪೆಕ್ಟ್ರಮ್",
+        no_pathogens: "ಇನ್ನೂ ಯಾವುದೇ ರೋಗಕಾರಕಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ",
+        lbl_quick_links: "ತ್ವರಿತ ಲಿಂಕ್‌ಗಳು",
+        btn_start_scan: "ರೋಗನಿರ್ಣಯ ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ",
+        btn_about_ai: "ಎಐ ಕೋರ್ ಬಗ್ಗೆ",
+        heatmap_title: "ಸಕ್ರಿಯ ರೋಗಕಾರಕ ಏಕಾಏಕಿ ನಕ್ಷೆ",
+        heatmap_desc: "ಪ್ರಮುಖ ಕೃಷಿ ಕಾರಿಡಾರ್‌ಗಳಲ್ಲಿ ಬಾಳೆ ತೋಟದ ರೋಗಗಳನ್ನು ನಕ್ಷೆ ಮಾಡುವ ನೈಜ-ಸಮಯದ ಜೈವಿಕ ಸುರಕ್ಷತೆ ನಕ್ಷೆ.",
+        lbl_live: "ಲೈವ್ ರೇಡಾರ್",
+        legend_critical: "ಗಂಭೀರ ಏಕಾಏಕಿ (ಪನಾಮಾ ಬಾಡುವಿಕೆ, ಮೊಕೊ)",
+        legend_moderate: "ಮಧ್ಯಮ ತೀವ್ರತೆ (ಸಿಗಾಟೋಕಾ, ಕೀಟಗಳು)",
+        legend_low: "ಸ್ಥಿರ / ನಿಯಂತ್ರಿತ ವಲಯಗಳು"
+      }
+    };
+
+    function changeLanguage(lang) {
+      localStorage.setItem('leafai-lang', lang);
+      applyTranslations(lang);
+      const desktopSel = document.getElementById('langSelectDesktop');
+      const mobileSel = document.getElementById('langSelectMobile');
+      if (desktopSel) desktopSel.value = lang;
+      if (mobileSel) mobileSel.value = lang;
+    }
+
+    function applyTranslations(lang) {
+      const pack = translations[lang] || translations.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (pack[key]) el.textContent = pack[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (pack[key]) el.setAttribute('placeholder', pack[key]);
+      });
+    }
+
+    // ── LeafyBot Chatbot ──────────────────────────────────────────────────
+    function toggleChat() {
+      const sidebar = document.getElementById('chatSidebar');
+      const bubble = document.getElementById('chatBubble');
+      sidebar.classList.toggle('active');
+      if (sidebar.classList.contains('active')) {
+        bubble.style.animation = 'none';
+      } else {
+        bubble.style.animation = '';
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('chatInput').value = promptText;
+      sendMessage();
+    }
+
+    function getTimeString() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function appendMessage(sender, text, isTyping = false) {
+      const messagesDiv = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      if (isTyping) msgDiv.id = 'typingIndicator';
+      
+      const timeSpan = isTyping ? '' : `<span class="msg-time">${getTimeString()}</span>`;
+      msgDiv.innerHTML = text + timeSpan;
+      
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+      return msgDiv;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      
+      appendMessage('user', text);
+      
+      const typingHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+      const indicator = appendMessage('bot', typingHTML, true);
+      
+      await new Promise(resolve => setTimeout(resolve, 900));
+      indicator.remove();
+      
+      const lower = text.toLowerCase();
+      let reply = "";
+      
+      if (lower.includes('black sigatoka') || lower.includes('sigatoka')) {
+        reply = "<strong>Black Sigatoka</strong> is a high-severity fungal leaf spot caused by <em>Mycosphaerella fijiensis</em>. It causes dark streaks that expand into large dead leaf sections, reducing crop yield by up to 50%.<br><br><strong>Remedy:</strong><br>1. Prune and destroy infected leaves immediately.<br>2. Spray protective fungicides (Tilt/Propiconazole) every 2 weeks during the wet season.<br>3. Apply organic neem oil (5ml/L) to prevent spore spread.";
+      } else if (lower.includes('yellow sigatoka')) {
+        reply = "<strong>Yellow Sigatoka</strong> is a moderate fungal infection caused by <em>Mycosphaerella musicola</em>. It displays yellow-green streaks with gray centers.<br><br><strong>Remedy:</strong><br>1. Practice regular de-leafing.<br>2. Spray Copper Oxychloride or Bordeaux mixture (1%).<br>3. Ensure proper drainage to lower humidity.";
+      } else if (lower.includes('panama') || lower.includes('fusarium') || lower.includes('wilt')) {
+        reply = "⚠️ <strong>Panama Disease (Fusarium Wilt)</strong> is a critical soil-borne fungal threat. There is <strong>no chemical cure</strong>, and it can live in the soil for 30+ years.<br><br><strong>Action:</strong><br>1. Immediately uproot and burn the entire infected plant.<br>2. Establish a 5m isolation quarantine.<br>3. Do NOT replant bananas in the same soil. Use tissue culture plantlets in clean areas.";
+      } else if (lower.includes('moko')) {
+        reply = "⚠️ <strong>Moko Disease</strong> is a critical bacterial infection caused by <em>Ralstonia solanacearum</em>. It blocks water transport, leading to rapid wilting and pseudostem rotting.<br><br><strong>Action:</strong><br>1. There is no chemical cure; infected crops must be destroyed.<br>2. Strict quarantine is required. Sterilize all farming tools in 10% bleach.<br>3. Avoid replanting bananas for at least 12 months.";
+      } else if (lower.includes('pest') || lower.includes('insect') || lower.includes('weevil') || lower.includes('bug')) {
+        reply = "<strong>Banana Insect Pests</strong> (Weevils, Aphids, Thrips) weaken plants and spread viral/bacterial infections.<br><br><strong>Remedy:</strong><br>1. Deploy pheromone traps around fields for Weevils.<br>2. Spray eco-friendly <em>Bacillus thuringiensis</em> (Bt) for leaf-chewing caterpillars.<br>3. Apply natural garlic-chili or neem sprays.";
+      } else if (lower.includes('organic') || lower.includes('bio') || lower.includes('natural')) {
+        reply = "🍃 <strong>Organic Crop Protection Tips:</strong><br>1. Spray Neem Oil solution (5ml/L) every 10-14 days to deter pests and light fungal spots.<br>2. Introduce beneficial microbes (<em>Trichoderma</em> or <em>Bacillus subtilis</em>) to soil to combat root pathogens.<br>3. Spray foliar compost tea to boost leaf immunity.";
+      } else if (lower.includes('treatment') || lower.includes('cure') || lower.includes('remedy') || lower.includes('fungicide')) {
+        reply = "Cures depend heavily on the pathogen:<br><br>- <strong>Fungal spots (Sigatoka, Cordana):</strong> Use Mancozeb, Propiconazole, or Organic Neem Oil.<br>- <strong>Bacterial/Viral wilt (Moko, Panama):</strong> No cure exists. Uproot, sanitize tools, and quarantine the soil immediately.";
+      } else {
+        reply = "I am here to help you identify and manage banana plant conditions! 🍌 Ask me about:<br>• <strong>Black or Yellow Sigatoka</strong><br>• <strong>Panama Wilt or Moko Disease</strong><br>• <strong>Organic remedies & pests</strong><br>• <strong>General prevention tips</strong>";
+      }
+      
+      appendMessage('bot', reply);
+    }
+
+    // ── Theme Switcher ──────────────────────────────────────────────────────
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const nextTheme = isDark ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('leafai-theme', nextTheme);
+      
+      const icons = [document.getElementById('themeIcon'), document.getElementById('themeIconMobile')];
+      icons.forEach(icon => {
+        if (icon) icon.className = nextTheme === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+      });
+    }
+
+    // ── Toast Notification System ────────────────────────────────────────
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const iconMap = {
+        success: 'bi-check-circle-fill',
+        error: 'bi-exclamation-octagon-fill',
+        info: 'bi-info-circle-fill'
+      };
+      
+      const toast = document.createElement('div');
+      toast.className = `toast-notification toast-${type}`;
+      toast.innerHTML = `
+        <div class="toast-icon"><i class="bi ${iconMap[type] || iconMap.info}"></i></div>
+        <div>
+          <div class="fw-semibold" style="font-size: 0.85rem;">${message}</div>
+        </div>
+        <div class="toast-progress"></div>
+      `;
+      
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 350);
+      }, 4000);
+    }
+
+    // ── Scroll Reveal (IntersectionObserver) ─────────────────────────────
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    // ── Animated Counter Utility ─────────────────────────────────────────
+    function animateCounter(el, target, duration = 1200) {
+      let start = 0;
+      const isFloat = String(target).includes('.');
+      const suffix = el.dataset.suffix || '';
+      const prefix = el.dataset.prefix || '';
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = start + (target - start) * eased;
+        
+        el.textContent = prefix + (isFloat ? current.toFixed(1) : Math.floor(current)) + suffix;
+        
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    function initCounters() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.counted) {
+            entry.target.dataset.counted = 'true';
+            const target = parseFloat(entry.target.dataset.target);
+            animateCounter(entry.target, target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('[data-counter]').forEach(el => observer.observe(el));
+    }
+
+    // ── Initialization ──────────────────────────────────────────────────
+    (function() {
+      const savedTheme = localStorage.getItem('leafai-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      const savedLang = localStorage.getItem('leafai-lang') || 'en';
+      
+      window.addEventListener('DOMContentLoaded', () => {
+        // Theme init
+        const icons = [document.getElementById('themeIcon'), document.getElementById('themeIconMobile')];
+        icons.forEach(icon => {
+          if (icon) icon.className = savedTheme === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+        });
+        
+        // Language init
+        changeLanguage(savedLang);
+
+        // Scroll reveal init
+        initScrollReveal();
+        initCounters();
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 30) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        });
+
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 400) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        });
+
+        // Reading progress bar
+        const progressBar = document.getElementById('readingProgress');
+        window.addEventListener('scroll', () => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+          progressBar.style.width = progress + '%';
+        });
+
+        // Cursor glow effect (desktop only)
+        const glow = document.getElementById('cursorGlow');
+        if (glow && window.matchMedia('(hover: hover)').matches) {
+          document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+          });
+        }
+
+        // Convert Django messages to toast notifications
+        document.querySelectorAll('.alert[role="alert"]').forEach(alert => {
+          const text = alert.querySelector('.fw-medium')?.textContent || '';
+          if (text) {
+            const type = alert.classList.contains('alert-success') ? 'success' : 
+                         alert.classList.contains('alert-danger') ? 'error' : 'info';
+            showToast(text, type);
+            alert.style.display = 'none';
+          }
+        });
+      });
+    })();
+  </script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
