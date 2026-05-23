@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# Media / Uploads
+media/
+uploads/
+
+# Local SQLite Database (Optional, but often we don't want to bake in the local DB)
+# For Hugging Face Spaces we might want to include the local DB if there are seeded users,
+# but it's better to exclude and let it migrate on start if we want a fresh state. 
+# We'll leave it out of dockerignore so it gets copied for now, as it has their users!
