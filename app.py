@@ -1,12 +1,31 @@
 import gradio as gr
 import numpy as np
 import pickle
+import os
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-model = load_model("saved_model/best_model.keras")
+# Debug: print all files
+print("=== Files in /app/ ===")
+for root, dirs, files in os.walk("/app"):
+    for f in files:
+        print(os.path.join(root, f))
 
-with open("saved_model/class_names.pkl", "rb") as f:
+# Load model using absolute path
+model_path = "/app/saved_model/best_model.keras"
+h5_path = "/app/saved_model/banana_disease_model.h5"
+
+if os.path.exists(model_path):
+    print(f"Loading: {model_path}")
+    model = load_model(model_path)
+elif os.path.exists(h5_path):
+    print(f"Loading: {h5_path}")
+    model = load_model(h5_path)
+else:
+    raise FileNotFoundError(f"No model found! Searched: {model_path}, {h5_path}")
+
+# Load class names
+with open("/app/saved_model/class_names.pkl", "rb") as f:
     class_names_dict = pickle.load(f)
 
 class_names = [class_names_dict[i] for i in range(len(class_names_dict))]
