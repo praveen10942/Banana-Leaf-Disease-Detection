@@ -2,35 +2,33 @@ import gradio as gr
 import numpy as np
 import pickle
 import os
-import subprocess
+from huggingface_hub import hf_hub_download
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-# Pull actual LFS files (replaces pointer files with real content)
-print("Running git lfs pull...")
-result = subprocess.run(
-    ["git", "lfs", "pull"],
-    cwd="/app",
-    capture_output=True,
-    text=True
+print("Downloading model from HuggingFace Hub...")
+
+model_path = hf_hub_download(
+    repo_id="praveen10942/banana-disease-detector",
+    filename="saved_model/best_model.keras",
+    repo_type="space"
 )
-print("LFS stdout:", result.stdout)
-print("LFS stderr:", result.stderr)
+print(f"Model downloaded to: {model_path}")
 
-# Load model
-model_path = "/app/saved_model/best_model.keras"
-h5_path = "/app/saved_model/banana_disease_model.h5"
+pkl_path = hf_hub_download(
+    repo_id="praveen10942/banana-disease-detector",
+    filename="saved_model/class_names.pkl",
+    repo_type="space"
+)
 
-if os.path.exists(model_path):
-    model = load_model(model_path)
-else:
-    model = load_model(h5_path)
+model = load_model(model_path)
+print("Model loaded successfully!")
 
-# Load class names
-with open("/app/saved_model/class_names.pkl", "rb") as f:
+with open(pkl_path, "rb") as f:
     class_names_dict = pickle.load(f)
 
 class_names = [class_names_dict[i] for i in range(len(class_names_dict))]
+print(f"Classes: {class_names}")
 
 def predict(img):
     img = img.resize((224, 224))
