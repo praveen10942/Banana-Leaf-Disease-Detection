@@ -1,3 +1,21 @@
+---
+title: Banana Disease Detector
+emoji: 🍌
+colorFrom: green
+colorTo: yellow
+sdk: gradio
+sdk_version: "4.0.0"
+app_file: app.py
+pinned: false
+---
+
+
+
+
+
+
+
+
 # 🍌 Banana Leaf Disease Detector (CNN)
 
 An end-to-end deep learning web app built with **Django** and **MobileNetV2** (Transfer Learning) that detects banana leaf diseases from uploaded photos.
@@ -100,16 +118,4 @@ banana_cnn_project/
 
 
 
----
-title: Banana Disease Detector
-emoji: 🍌
-colorFrom: green
-colorTo: yellow
-sdk: gradio
-sdk_version: "4.0.0"
-app_file: app.py
-pinned: false
----
 
-# Banana Leaf Disease Detector
-Upload a banana leaf image to detect the disease.
