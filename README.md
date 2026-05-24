@@ -94,3 +94,22 @@ banana_cnn_project/
 - **Phase 1:** Train head only (10 epochs)
 - **Phase 2:** Fine-tune top 30 layers of MobileNetV2 (20 epochs)
 - **Expected accuracy:** 95%+
+
+
+
+
+
+
+---
+title: Banana Disease Detector
+emoji: 🍌
+colorFrom: green
+colorTo: yellow
+sdk: gradio
+sdk_version: "4.0.0"
+app_file: app.py
+pinned: false
+---
+
+# Banana Leaf Disease Detector
+Upload a banana leaf image to detect the disease.
