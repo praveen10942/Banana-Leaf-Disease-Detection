@@ -2,27 +2,29 @@ import gradio as gr
 import numpy as np
 import pickle
 import os
+import subprocess
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-# Debug: print all files
-print("=== Files in /app/ ===")
-for root, dirs, files in os.walk("/app"):
-    for f in files:
-        print(os.path.join(root, f))
+# Pull actual LFS files (replaces pointer files with real content)
+print("Running git lfs pull...")
+result = subprocess.run(
+    ["git", "lfs", "pull"],
+    cwd="/app",
+    capture_output=True,
+    text=True
+)
+print("LFS stdout:", result.stdout)
+print("LFS stderr:", result.stderr)
 
-# Load model using absolute path
+# Load model
 model_path = "/app/saved_model/best_model.keras"
 h5_path = "/app/saved_model/banana_disease_model.h5"
 
 if os.path.exists(model_path):
-    print(f"Loading: {model_path}")
     model = load_model(model_path)
-elif os.path.exists(h5_path):
-    print(f"Loading: {h5_path}")
-    model = load_model(h5_path)
 else:
-    raise FileNotFoundError(f"No model found! Searched: {model_path}, {h5_path}")
+    model = load_model(h5_path)
 
 # Load class names
 with open("/app/saved_model/class_names.pkl", "rb") as f:
