@@ -4,4 +4,4 @@ Pillow>=10.4.0
 numpy>=2.1.0
 gunicorn==21.2.0
 whitenoise[brotli]==6.6.0
-gradio>=5.0.0
+gradio>=5.25.0
