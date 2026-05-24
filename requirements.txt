@@ -5,4 +5,3 @@ numpy>=2.1.0
 gunicorn==21.2.0
 whitenoise[brotli]==6.6.0
 gradio>=5.25.0
-pyaudioop; python_version >= "3.13"
