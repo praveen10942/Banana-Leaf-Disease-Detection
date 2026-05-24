@@ -1,11 +1,21 @@
 import gradio as gr
 import numpy as np
 import pickle
+import os
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-model = load_model("saved_model/banana_disease_model.keras")
+# Try all possible model filenames
+if os.path.exists("saved_model/banana_disease_model.keras"):
+    model = load_model("saved_model/banana_disease_model.keras")
+elif os.path.exists("saved_model/best_model.keras"):
+    model = load_model("saved_model/best_model.keras")
+elif os.path.exists("saved_model/banana_disease_model.h5"):
+    model = load_model("saved_model/banana_disease_model.h5")
+else:
+    raise FileNotFoundError("No model file found in saved_model/")
 
+# Load class names
 with open("saved_model/class_names.pkl", "rb") as f:
     class_names_dict = pickle.load(f)
 
