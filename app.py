@@ -1,8 +1,11 @@
 import gradio as gr
 import numpy as np
 import pickle
+import os
+os.environ["TF_USE_LEGACY_KERAS"] = "1"
+
 from huggingface_hub import hf_hub_download
-from tensorflow.keras.models import load_model
+import tf_keras
 from PIL import Image
 
 print("Downloading model...")
@@ -12,7 +15,6 @@ model_path = hf_hub_download(
     filename="saved_model/banana_disease_model.h5",
     repo_type="space"
 )
-print(f"Downloaded to: {model_path}")
 
 pkl_path = hf_hub_download(
     repo_id="praveen10942/banana-disease-detector",
@@ -20,7 +22,7 @@ pkl_path = hf_hub_download(
     repo_type="space"
 )
 
-model = load_model(model_path, compile=False)
+model = tf_keras.models.load_model(model_path, compile=False)
 print("Model loaded!")
 
 with open(pkl_path, "rb") as f:
