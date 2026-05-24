@@ -1,19 +1,18 @@
 import gradio as gr
 import numpy as np
 import pickle
-import os
 from huggingface_hub import hf_hub_download
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-print("Downloading model from HuggingFace Hub...")
+print("Downloading model...")
 
 model_path = hf_hub_download(
     repo_id="praveen10942/banana-disease-detector",
-    filename="saved_model/best_model.keras",
+    filename="saved_model/banana_disease_model.h5",
     repo_type="space"
 )
-print(f"Model downloaded to: {model_path}")
+print(f"Downloaded to: {model_path}")
 
 pkl_path = hf_hub_download(
     repo_id="praveen10942/banana-disease-detector",
@@ -21,8 +20,8 @@ pkl_path = hf_hub_download(
     repo_type="space"
 )
 
-model = load_model(model_path)
-print("Model loaded successfully!")
+model = load_model(model_path, compile=False)
+print("Model loaded!")
 
 with open(pkl_path, "rb") as f:
     class_names_dict = pickle.load(f)
